@@ -20,38 +20,51 @@ body {
   background-color: whitesmoke;
   flex-wrap: wrap;
   margin-bottom: 60px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#section .img-produto {
+#section img {
   height: 350px;
-  max-width: 100%;
-  border-radius: 8px;
+  max-width: 5000px;
+  border-radius: 12px;
+  object-fit: cover;
 }
 
 #section h1 {
-  font-size: 40px;
+  font-size: 2.5rem;
   max-width: 400px;
+  margin-bottom: 10px;
+}
+
+#section h2 {
+  font-size: 1.8rem;
+  margin-top: -10px;
   margin-bottom: 20px;
+  color: #555;
 }
 
 #compre {
   color: white;
-  background-color: #111;
+  background-color: #007bff;
   border: none;
   padding: 12px 30px;
   font-size: 16px;
   border-radius: 8px;
-  transition: 0.3s;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.4);
 }
 
 #compre:hover {
-  background-color: green;
-  cursor: pointer;
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 86, 179, 0.6);
 }
 
 /* ===== PROMOÇÕES COM CARROSSEL ===== */
 .promocoes {
-  background-color: #fff0f0;
+  background-color: #fff5f5;
   padding: 40px;
   text-align: center;
   margin-bottom: 60px;
@@ -86,11 +99,15 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 10px;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
-.promocoes .item:hover {
+.promocoes .item:hover,
+.promocoes .item:focus {
   transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  outline: none;
 }
 
 .promocoes .img-produto {
@@ -149,11 +166,15 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
-.carrossel .item:hover {
+.carrossel .item:hover,
+.carrossel .item:focus {
   transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  outline: none;
 }
 
 .carrossel .img-produto {
@@ -176,17 +197,23 @@ body {
 }
 
 /* ===== RESPONSIVO ===== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   #section {
+    padding: 40px 40px;
     flex-direction: column;
     text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  #section {
     padding: 40px 20px;
   }
 
-  #section .img-produto {
+  #section img {
     height: auto;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     margin: 0 auto 20px;
   }
 
