@@ -1,114 +1,157 @@
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-.nav-links a {
-  margin-right: 20px;
-  text-decoration: none;
-  color: black;
-  font-weight: 500;
-}
-
-.cart-icon {
-  font-size: 20px;
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
+  color: #333;
+  line-height: 1.6;
 }
 
 .product-container {
   display: flex;
   max-width: 1200px;
   margin: 40px auto;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 24px;
+  background: #fafafa;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
 .product-image img {
   max-width: 400px;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .product-details {
-  margin-left: 40px;
   flex: 1;
+  min-width: 300px;
 }
 
 .product-details h1 {
-  font-size: 36px;
+  font-size: 2.8rem;
   line-height: 1.2;
+  font-weight: 700;
+  color: #111;
 }
 
 .product-details h1 span {
   display: block;
+  font-weight: 500;
+  color: #666;
+  margin-top: 6px;
+  font-size: 1.25rem;
 }
 
 .price {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 16px 0 10px;
+  color: #14532d; /* verde escuro como na homepage */
 }
 
 .rating {
-  margin-top: 10px;
-  color: black;
+  margin-top: 12px;
+  color: #444;
+  font-weight: 600;
 }
 
 .rating span {
   margin-left: 8px;
   font-size: 14px;
-  color: gray;
+  color: #888;
 }
 
 .short-description {
-  margin-top: 15px;
+  margin-top: 20px;
+  font-size: 1rem;
   color: #555;
+  line-height: 1.4;
 }
 
 .size-selector p {
-  margin-top: 20px;
-  font-weight: bold;
+  margin-top: 24px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: #111;
 }
 
 .size-selector button {
-  margin-right: 10px;
-  padding: 8px 16px;
-  border: 1px solid black;
+  margin-right: 12px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: 2px solid #111;
   background: white;
   cursor: pointer;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.size-selector button:hover {
-  background: black;
+.size-selector button:hover,
+.size-selector button.selected {
+  background-color: #007bff;
   color: white;
+  border-color: #0056b3;
 }
 
 .add-to-cart {
   display: inline-block;
-  margin-top: 20px;
-  padding: 12px 24px;
-  background: black;
+  margin-top: 30px;
+  padding: 14px 32px;
+  background-color: #007bff;
   color: white;
   border: none;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
 }
 
 .add-to-cart:hover {
-  opacity: 0.9;
+  background-color: #0056b3;
 }
 
 .description {
   max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin: 40px auto;
+  padding: 24px;
+  background: #fafafa;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-radius: 16px;
 }
 
 .description h2 {
-  margin-bottom: 10px;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111;
+}
+
+.description p {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+  .product-container {
+    flex-direction: column;
+    padding: 20px;
+    margin: 20px auto;
+  }
+  .product-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  .product-details {
+    margin-left: 0;
+  }
 }

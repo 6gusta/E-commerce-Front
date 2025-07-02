@@ -1,4 +1,7 @@
-/* ===== RESET E BASE ===== */
+/* IMPORTAÇÃO DE FONTE MODERNA */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -6,292 +9,284 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #fafafa;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
   color: #333;
+  line-height: 1.6;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-  display: block;
-}
-
-/* ===== BOTÃO PADRÃO ===== */
-.btn {
-  background-color: #007bff;
-  color: white;
-  margin-top: 20px;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.4);
-}
-
-.btn:hover {
-  background-color: #0056b3;
-  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.6);
+/* CONTAINER GERAL */
+section {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
 }
 
 /* ===== HERO SECTION ===== */
-#section {
+.hero {
+  background-image: url('/assets/banner-fashion.jpg'); /* sua imagem aqui */
+  background-size: cover;
+  background-position: center;
+  height: 420px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 60px 80px;
-  background-color: whitesmoke;
-  flex-wrap: wrap;
-  margin: 0 auto 60px;
-  max-width: 1200px;
+  justify-content: flex-start;
+  padding: 3rem;
+  color: white;
+  position: relative;
+  margin-bottom: 3rem;
 }
 
-#section img {
-  height: auto;
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.6), transparent);
+  border-radius: 16px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
   max-width: 500px;
-  border-radius: 12px;
-  object-fit: cover;
 }
 
-#section h1 {
+.hero h1 {
   font-size: 2.5rem;
-  max-width: 400px;
-  margin-bottom: 10px;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
-#section h2 {
-  font-size: 1.8rem;
-  margin-top: -10px;
-  margin-bottom: 20px;
-  color: #555;
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
 }
 
-/* ===== PROMOÇÕES ===== */
-.promocoes {
-  background-color: #fff5f5;
-  padding: 40px;
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.promocoes h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-.promocoes-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  gap: 20px;
-  padding: 10px;
-}
-
-.promocoes-container::-webkit-scrollbar {
-  height: 6px;
-}
-
-.promocoes-container::-webkit-scrollbar-thumb {
-  background-color: #f88;
-  border-radius: 10px;
-}
-
-.promocoes .item {
-  min-width: 200px;
-  flex-shrink: 0;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  transition: transform 0.3s, box-shadow 0.3s;
-  cursor: pointer;
-}
-
-.promocoes .item:hover,
-.promocoes .item:focus {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  outline: none;
-}
-
-.promocoes .img-produto {
-  width: 100%;
-  height: 300px;
-  object-fit: contain;
+.hero .btn {
+  background-color: #fff;
+  color: #111;
+  padding: 0.8rem 1.8rem;
   border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
 }
 
-.promocoes .preco {
-  font-size: 18px;
-  color: green;
-  margin-top: 10px;
+.hero .btn:hover {
+  background-color: #111;
+  color: #fff;
 }
 
-.promocoes .desconto {
-  font-size: 16px;
-  color: red;
-  text-decoration: line-through;
-  margin-left: 8px;
+/* ===== GRID DE CATEGORIAS ===== */
+.categorias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 3rem;
 }
 
-/* ===== CARROSSEL ===== */
-.carrossel {
-  padding: 40px;
+.categoria-card {
   background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 1rem;
   text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.carrossel h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
+.categoria-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
 
+.categoria-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+.categoria-card span {
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== SEÇÕES (Novidades, Promoções, Populares) ===== */
+h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 1.2rem;
+  color: #111;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.novidades,
+.promocoes,
+.carrossel {
+  margin-bottom: 3rem;
+}
+
+.novidades-container,
+.promocoes-container,
 .carrossel-container {
   display: flex;
+  gap: 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  gap: 20px;
-  padding: 10px;
+  padding-bottom: 1rem;
 }
 
+.novidades-container::-webkit-scrollbar,
+.promocoes-container::-webkit-scrollbar,
 .carrossel-container::-webkit-scrollbar {
   height: 6px;
 }
 
+.novidades-container::-webkit-scrollbar-thumb,
+.promocoes-container::-webkit-scrollbar-thumb,
 .carrossel-container::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 10px;
 }
 
-.carrossel .item {
-  min-width: 200px;
+/* CARD DE PRODUTO */
+.item {
   flex-shrink: 0;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  transition: transform 0.3s, box-shadow 0.3s;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.carrossel .item:hover,
-.carrossel .item:focus {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+.item:hover,
+.item:focus {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  transform: translateY(-5px);
   outline: none;
 }
 
-.carrossel .img-produto {
+.img-produto {
   width: 100%;
-  height: 220px;
-  object-fit: contain;
-  border-radius: 8px;
+  height: 240px;
+  object-fit: cover;
+  display: block;
 }
 
-.carrossel .preco {
-  font-size: 18px;
-  color: green;
-  margin-top: 10px;
-}
-
-.carrossel p {
-  margin-top: 10px;
-  font-weight: bold;
-  color: #333;
-}
-
-/* ===== NOVIDADES ===== */
-.novidades {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
-
-.novidades h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.novidades-container {
-  display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  scroll-behavior: smooth;
-  padding-bottom: 1rem;
-}
-
-.novidades-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.novidades-container::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 4px;
-}
-
-.novidades-container .item {
-  min-width: 220px;
-  background-color: #f8f8f8;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.novidades-container .img-produto {
-  width: 100%;
-  height: 180px;
-  object-fit: contain;
-  border-radius: 12px;
-  margin-bottom: 0.5rem;
+.item > h3 {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 16px 16px 8px;
+  color: #111;
 }
 
 .desc-produto {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #555;
-  margin: 0.5rem 0;
-  height: 40px;
+  margin: 0 16px 12px;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 }
 
 .preco {
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  color: #14532d;
+  font-size: 1.15rem;
+  margin: 0 16px 16px;
+}
+
+.promocoes .desconto {
+  text-decoration: line-through;
+  color: #999;
+  font-weight: 500;
+  margin-left: 10px;
+  font-size: 0.9rem;
+}
+
+.btn {
+  background: transparent;
+  border: 2px solid #111;
+  color: #111;
+  padding: 0.6rem 1.4rem;
+  margin: 0 16px 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: #111;
+  color: #fff;
+  outline: none;
+}
+
+/* ===== RODAPÉ ===== */
+footer {
+  background-color: #111;
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 4rem;
+  border-top: 1px solid #333;
+}
+
+footer a {
+  color: #aaa;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: white;
 }
 
 /* ===== RESPONSIVO ===== */
-@media (max-width: 1024px) {
-  #section {
-    padding: 40px;
-    flex-direction: column;
+@media (max-width: 768px) {
+  .hero {
+    height: auto;
+    padding: 2rem;
     text-align: center;
   }
-}
 
-@media (max-width: 768px) {
-  #section {
-    padding: 40px 20px;
+  .hero h1 {
+    font-size: 2rem;
   }
 
-  #section img {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto 20px;
+  .hero p {
+    font-size: 1rem;
   }
 
-  .promocoes-container,
-  .carrossel-container,
-  .novidades-container {
-    flex-wrap: nowrap;
+  .item {
+    width: 260px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+
+  .img-produto {
+    height: 200px;
   }
 }

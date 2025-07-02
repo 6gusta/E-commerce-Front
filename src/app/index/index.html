@@ -1,24 +1,43 @@
 <section class="novidades">
   <h2>Novidades fresquinhas</h2>
-  <div class="carrossel-container">
+  <div class="novidades-container">
     <div 
       *ngFor="let item of produtosNovidades" 
-      [routerLink]="['/produto', item.idproduto]" 
-      class="item" tabindex="0"
-      [attr.aria-label]="'Produto ' + item.nomeProduto + ' por R$' + item.precoProduto"
+      class="item" 
+      tabindex="0"
+      role="link"
+      [routerLink]="['/produto', item.idproduto]"
+      [attr.aria-label]="'Ver detalhes do produto ' + item.nomeProduto"
       style="cursor: pointer;"
     >
       <img 
+        loading="lazy"
         [src]="item.imagemProduto.startsWith('data:image') ? item.imagemProduto : 'data:image/webp;base64,' + item.imagemProduto"
-        [alt]="item.nomeProduto" class="img-produto" 
+        [alt]="'Imagem do produto ' + item.nomeProduto"
+        class="img-produto"
       />
+
       <h3>{{ item.nomeProduto }}</h3>
-      <p class="desc-produto">{{ item.descProduto }}</p>
-      <p class="preco">R$ {{ item.precoProduto | number:'1.2-2' }}</p>
-      <button class="btn" (click)="irParaProduto(item.idproduto)">Detalhess</button>
+
+      <p class="desc-produto">
+        {{ item.descProduto }}
+      </p>
+
+      <p class="preco">
+        R$ {{ item.precoProduto | number:'1.2-2' }}
+      </p>
+
+      <button 
+        class="btn" 
+        (click)="irParaProduto(item.idproduto); $event.stopPropagation()"
+        [attr.aria-label]="'Ir para detalhes de ' + item.nomeProduto"
+      >
+        Detalhes
+      </button>
     </div>
   </div>
 </section>
+
 
 
 

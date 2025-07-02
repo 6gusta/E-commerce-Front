@@ -11,6 +11,7 @@ export interface Produto {
   estoqueProduto: boolean;
   dataCadastro: string;
   imagemProduto: string;
+   tamanhosDisponiveis?: string[];
 }
 
 @Injectable({

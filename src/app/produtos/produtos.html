@@ -27,17 +27,18 @@
     <p class="short-description">
       {{ produto.descProduto }}
     </p>
-
-    <div class="size-selector">
+<div *ngIf="temTamanhosDisponiveis">
       <p>SIZE</p>
-      <button>S</button>
-      <button>M</button>
-      <button>L</button>
-      <button>XL</button>
+      <button 
+        *ngFor="let tamanho of produto.tamanhosDisponiveis"
+        (click)="selecionarTamanho(tamanho)"
+        [class.selected]="tamanhoSelecionado === tamanho"
+      >
+        {{ tamanho }}
+      </button>
     </div>
 
-<button class="add-to-cart" (click)="adicionarAoCarrinho()">ADD TO CART</button>
-
+    <button class="add-to-cart" (click)="adicionarAoCarrinho()">ADD TO CART</button>
 
     <p>
       Estoque: {{ produto.estoqueProduto ? 'Disponível' : 'Indisponível' }}
@@ -56,4 +57,3 @@
   <p *ngIf="errorMsg">{{ errorMsg }}</p>
   <p *ngIf="!produto && !errorMsg">Carregando produto...</p>
 </ng-template>
-``

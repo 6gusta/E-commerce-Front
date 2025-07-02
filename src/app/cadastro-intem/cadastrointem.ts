@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ProdutoService, Produto } from '../services/produtoservice'; // ajuste o path conforme seu projeto
 import { HttpClientModule } from '@angular/common/http';
 
@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class ProdutoCadastroComponent {
   categorias = ['NOVIDADES', 'PROMOCOES', 'MAISPEDIDOS'];
+  tamanhos = ['S', 'M', 'L', 'XL'];
   produtoForm: FormGroup;
   imagemPreview: string | ArrayBuffer | null = null;
 
@@ -24,28 +25,81 @@ export class ProdutoCadastroComponent {
       categoriaProduto: ['', Validators.required],
       estoqueProduto: [false],
       dataCadastro: ['', Validators.required],
-      imagemProduto: [null, Validators.required]
+      imagemProduto: [null, Validators.required],
+      tamanhosDisponiveis: this.fb.array([]) // ← adicionando aqui
     });
   }
 
-  onImagemChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagemPreview = reader.result;
-        this.produtoForm.patchValue({ imagemProduto: reader.result });
-      };
-      reader.readAsDataURL(file);
+  get tamanhosDisponiveis(): FormArray {
+    return this.produtoForm.get('tamanhosDisponiveis') as FormArray;
+  }
+
+  onTamanhoChange(event: any) {
+    const value = event.target.value;
+    const formArray = this.tamanhosDisponiveis;
+
+    if (event.target.checked) {
+      formArray.push(this.fb.control(value));
+    } else {
+      const index = formArray.controls.findIndex(x => x.value === value);
+      formArray.removeAt(index);
     }
   }
+
+  onImagemChange(event: any): void {
+  const file = event.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 600;
+        const MAX_HEIGHT = 600;
+        let width = img.width;
+        let height = img.height;
+
+        // Redimensiona proporcionalmente
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = height * (MAX_WIDTH / width);
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = width * (MAX_HEIGHT / height);
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const resizedBase64 = canvas.toDataURL('image/webp');
+
+          // Salva imagem redimensionada no formulário e na preview
+          this.imagemPreview = resizedBase64;
+          this.produtoForm.patchValue({ imagemProduto: resizedBase64 });
+        }
+      };
+
+      img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+}
+
 
   onSubmit() {
     if (this.produtoForm.valid) {
       const produto: Produto = this.produtoForm.value;
 
       this.produtoService.cadastrarProduto(produto).subscribe({
-        next: (res) => {
+        next: () => {
           alert('✅ Produto cadastrado com sucesso!');
           this.produtoForm.reset();
           this.imagemPreview = null;
@@ -59,4 +113,6 @@ export class ProdutoCadastroComponent {
       alert('⚠️ Preencha todos os campos obrigatórios!');
     }
   }
+
+  
 }

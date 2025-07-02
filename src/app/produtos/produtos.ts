@@ -1,10 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Produto, ProdutoService } from '../services/produtoservice';
-import {CartService} from '../services/adicionarcartservice'
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { CartService } from '../services/adicionarcartservice';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-produtos',
@@ -17,30 +15,28 @@ export class Produtos implements OnInit {
   produto!: Produto;
   errorMsg?: string;
 
+  tamanhoSelecionado?: string;  // controla o tamanho escolhido pelo usuário
+
   constructor(
     private produtoService: ProdutoService,
-      private cartService: CartService,
-        private router: Router,
+    private cartService: CartService,
+    private router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef  // injeta ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    console.log('ngOnInit Produtos chamado');
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      console.log('ID da rota:', id);
       if (id) {
         this.produtoService.getProdutoPorId(+id).subscribe({
           next: (res) => {
-            console.log('Produto recebido:', res);
             this.produto = res;
-            this.cdr.detectChanges(); // força atualizar a view
+            this.cdr.detectChanges();
           },
           error: (err) => {
-            console.error('Erro ao carregar produto', err);
             this.errorMsg = 'Erro ao carregar produto';
-            this.cdr.detectChanges(); // também força no erro
+            this.cdr.detectChanges();
           }
         });
       } else {
@@ -49,20 +45,36 @@ export class Produtos implements OnInit {
       }
     });
   }
-  adicionarAoCarrinho() {
-  const item = {
-    produto: this.produto,
-    quantidade: 1
-  };
 
-  this.cartService.adicionarAoCarrinho(item).subscribe({
-    next: () => {
-      console.log('Produto adicionado ao carrinho!');
-      this.router.navigate(['/carrinho']); // ou `/produto/${id}/checkout`
-    },
-    error: (err) => {
-      console.error('Erro ao adicionar ao carrinho', err);
+  selecionarTamanho(tamanho: string) {
+    this.tamanhoSelecionado = tamanho;
+  }
+
+  adicionarAoCarrinho() {
+    if (!this.tamanhoSelecionado) {
+      alert('Por favor, selecione um tamanho antes de adicionar ao carrinho.');
+      return;
     }
-  });
+
+    const item = {
+      produto: this.produto,
+      tamanho: this.tamanhoSelecionado,  // inclui o tamanho no item do carrinho
+      quantidade: 1
+    };
+
+    this.cartService.adicionarAoCarrinho(item).subscribe({
+      next: () => {
+        console.log('Produto adicionado ao carrinho!');
+        this.router.navigate(['/carrinho']);
+      },
+      error: (err) => {
+        console.error('Erro ao adicionar ao carrinho', err);
+      }
+    });
+  }
+
+  get temTamanhosDisponiveis(): boolean {
+  return !!(this.produto && this.produto.tamanhosDisponiveis && this.produto.tamanhosDisponiveis.length > 0);
 }
+
 }

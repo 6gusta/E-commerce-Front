@@ -51,6 +51,17 @@
       <img [src]="imagemPreview" alt="Imagem do produto" />
     </div>
 
+    <!-- TAMANHOS DISPONÍVEIS -->
+    <div class="size-selector">
+      <p>Tamanhos disponíveis:</p>
+      <div *ngFor="let t of tamanhos">
+        <label>
+          <input type="checkbox" [value]="t" (change)="onTamanhoChange($event)" />
+          {{ t }}
+        </label>
+      </div>
+    </div>
+
     <button type="submit" class="btn" [disabled]="produtoForm.invalid">Cadastrar</button>
   </form>
 </div>
