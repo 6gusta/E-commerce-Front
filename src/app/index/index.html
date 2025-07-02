@@ -1,75 +1,70 @@
-<section id="section" style="
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  padding: 2rem;
-  background-color: #f8f8f8;
-  border-radius: 12px;
-  margin: 2rem auto;
-  max-width: 1200px; /* limita largura para desktop */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  flex-wrap: wrap;
-">
-  <!-- Imagem -->
-  <img src="assets/roupa2.webp" alt="Blusa Masculina Oversized em algodão premium" style="width: 320px; border-radius: 12px;" />
-
-  <!-- Texto -->
-  <div style="flex: 1; min-width: 280px;">
-    <h1 style="font-size: 2rem; font-weight: bold;">Novidades fresquinhas. <br> Garanta já a sua!</h1><br>
-    <h2 style="margin-top: -10px; font-weight: 600;">Blusa Masculina Oversized LA</h2>
-
-    <p style="margin: 1rem 0; font-size: 1.1rem;">
-      Blusa masculina em algodão premium, perfeita para todas as estações.
-      <br><strong>Tamanhos:</strong> P, M, G, GG
-    </p>
-
-    <button routerLink="/produtos"  id="compre" aria-label="Comprar blusa masculina oversized">
-      Compre Agora
-    </button>
+<section class="novidades">
+  <h2>Novidades fresquinhas</h2>
+  <div class="carrossel-container">
+    <div 
+      *ngFor="let item of produtosNovidades" 
+      [routerLink]="['/produto', item.idproduto]" 
+      class="item" tabindex="0"
+      [attr.aria-label]="'Produto ' + item.nomeProduto + ' por R$' + item.precoProduto"
+      style="cursor: pointer;"
+    >
+      <img 
+        [src]="item.imagemProduto.startsWith('data:image') ? item.imagemProduto : 'data:image/webp;base64,' + item.imagemProduto"
+        [alt]="item.nomeProduto" class="img-produto" 
+      />
+      <h3>{{ item.nomeProduto }}</h3>
+      <p class="desc-produto">{{ item.descProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number:'1.2-2' }}</p>
+      <button class="btn" (click)="irParaProduto(item.idproduto)">Detalhes</button>
+    </div>
   </div>
 </section>
 
-<!-- Seção de promoções -->
+
+
+<!-- Seção de promoções dinâmica -->
 <section class="promocoes">
   <h2>Ofertas da Semana</h2>
   <div class="promocoes-container">
-    <div class="item" tabindex="0" aria-label="Oferta Moletom Oversized por R$99,90, desconto de R$149,90">
-      <img src="assets/roupa2.webp" alt="Moletom Oversized em oferta" class="img-produto" />
-      <p>Moletom Oversized</p>
-      <p class="preco">R$ 99,90 <span class="desconto">R$ 149,90</span></p>
-    </div>
-    <div class="item" tabindex="0" aria-label="Oferta Moletom Oversized por R$99,90, desconto de R$149,90">
-      <img src="assets/roupa2.webp" alt="Moletom Oversized em oferta" class="img-produto" />
-      <p>Moletom Oversized</p>
-      <p class="preco">R$ 99,90 <span class="desconto">R$ 149,90</span></p>
-    </div>
-    <div class="item" tabindex="0" aria-label="Oferta Moletom Oversized por R$99,90, desconto de R$149,90">
-      <img src="assets/roupa2.webp" alt="Moletom Oversized em oferta" class="img-produto" />
-      <p>Moletom Oversized</p>
-      <p class="preco">R$ 99,90 <span class="desconto">R$ 149,90</span></p>
+    <!-- Alterado: usa produtosPromocoes -->
+    <div 
+      *ngFor="let item of produtosPromocoes" 
+      [routerLink]="['/produto', item.idproduto]" 
+      class="item" tabindex="0"
+      [attr.aria-label]="'Oferta ' + item.nomeProduto + ' por R$' + item.precoProduto"
+      style="cursor: pointer;"
+    >
+      <img 
+        [src]="item.imagemProduto.startsWith('data:image') ? item.imagemProduto : 'data:image/webp;base64,' + item.imagemProduto"
+        [alt]="item.nomeProduto" class="img-produto" 
+      />
+      <p>{{ item.nomeProduto }}</p>
+      <p class="preco">
+        R$ {{ item.precoProduto | number:'1.2-2' }} 
+        <span class="desconto">R$ {{ (item.precoProduto + 50) | number:'1.2-2' }}</span>
+      </p>
     </div>
   </div>
 </section>
 
-<!-- Produtos Populares -->
+<!-- Produtos Populares dinâmica -->
 <section class="carrossel">
   <h2>Produtos Populares</h2>
   <div class="carrossel-container">
-    <div class="item" tabindex="0" aria-label="Produto Camiseta Vintage por R$79,90">
-      <img src="assets/logo.png" alt="Camiseta Vintage" class="img-produto" />
-      <p>Camiseta Vintage</p>
-      <p class="preco">R$ 79,90</p>
-    </div>
-    <div class="item" tabindex="0" aria-label="Produto Calça Cargo por R$129,90">
-      <img src="assets/logo.png" alt="Calça Cargo" class="img-produto" />
-      <p>Calça Cargo</p>
-      <p class="preco">R$ 129,90</p>
-    </div>
-    <div class="item" tabindex="0" aria-label="Produto Jaqueta Jeans por R$199,90">
-      <img src="assets/logo.png" alt="Jaqueta Jeans" class="img-produto" />
-      <p>Jaqueta Jeans</p>
-      <p class="preco">R$ 199,90</p>
+    <!-- Alterado: usa produtosMaisPedidos -->
+    <div 
+      *ngFor="let item of produtosMaisPedidos" 
+      [routerLink]="['/produto', item.idproduto]" 
+      class="item" tabindex="0"
+      [attr.aria-label]="'Produto ' + item.nomeProduto + ' por R$' + item.precoProduto"
+      style="cursor: pointer;"
+    >
+      <img 
+        [src]="item.imagemProduto.startsWith('data:image') ? item.imagemProduto : 'data:image/webp;base64,' + item.imagemProduto"
+        [alt]="item.nomeProduto" class="img-produto" 
+      />
+      <p>{{ item.nomeProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number:'1.2-2' }}</p>
     </div>
   </div>
 </section>

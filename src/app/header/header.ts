@@ -14,4 +14,10 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header.html',
   styleUrls: ['./header.css'] // Corrigido: era `styleUrl`, o correto é `styleUrls`
 })
-export class Header { }
+export class Header {
+  router: any;
+
+  goHome() {
+  this.router.navigate(['/index']);
+}
+ }

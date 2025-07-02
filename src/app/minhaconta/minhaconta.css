@@ -1,0 +1,94 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  color: #111;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 1px solid #eee;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #000;
+}
+
+.icons {
+  margin-left: 20px;
+}
+
+.container {
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+}
+
+.personal-info,
+.order-history {
+  margin-bottom: 50px;
+}
+
+.personal-info h2,
+.order-history h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+button {
+  padding: 10px 20px;
+  border: 1px solid #333;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.order-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.order-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.order-row.header {
+  font-weight: bold;
+}
+
+.skeleton {
+  height: 20px;
+  background: #f1f1f1;
+  border-radius: 4px;
+}

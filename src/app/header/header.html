@@ -6,14 +6,15 @@
   <nav>
     <!-- Imagem com nome e logo juntos -->
     <div style="display: flex; align-items: center;">
-      <img src="assets/logo.png" alt="Logo">
-      <h2>mega</h2>
+      <img [routerLink]="['/']" src="assets/logo.png" alt="Logo">
+      <h2  (click)="goHome()" >mega</h2>
 
     </div>
 
     <!-- Navegação -->
     <div style="display: flex; gap: 1.5rem; align-items: center;"  id="link">
       <a routerLink="/index" class="fw-bold">Home</a>
+      <a routerLink="/cadastrointem" class="fw-bold">Cadastrar</a>
       <a routerLink="/produtos" class="fw-bold">Comprar</a>
       <a routerLink="/cadastro" class="fw-bold">Sobre</a>
       <a routerLink="/loginong" class="btn btn-primary">Contato</a>
@@ -25,7 +26,7 @@
 
 <!-- Botão de perfil -->
 <button mat-icon-button aria-label="Perfil">
-  <mat-icon>person</mat-icon>
+  <mat-icon   routerLink="/minhaconta" >person</mat-icon>
 </button>
 
 <!-- Botão de carrinho -->
