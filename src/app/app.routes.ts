@@ -4,14 +4,14 @@ import { Index } from './index';
 import { Produtos } from './produtos/produtos';
 import { Carrinho } from './carrinho/carrinho';
 import { Minhaconta } from './minhaconta/minhaconta';
-import { Checkout } from './checkout/checkout';
+import { CheckoutComponent } from './checkout/checkout';
 import { ProdutoCadastroComponent } from './cadastro-intem/cadastrointem';
 
 
 export const routes: Routes = [
      { path: '', component: Home },
      { path: 'index', component: Index},
-   {path: 'checkout', component: Checkout},
+   {path: 'checkout', component: CheckoutComponent},
    { path: 'produto/:id', component: Produtos },
    {path: 'cadastrointem', component: ProdutoCadastroComponent},
 

@@ -2,7 +2,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Produto, ProdutoService } from '../services/produtoservice';
 import { CartService } from '../services/adicionarcartservice';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
+import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-service';
+
 
 @Component({
   selector: 'app-produtos',
@@ -15,14 +17,17 @@ export class Produtos implements OnInit {
   produto!: Produto;
   errorMsg?: string;
 
-  tamanhoSelecionado?: string;  // controla o tamanho escolhido pelo usuário
+  tamanhoSelecionado?: string;  
+    quantidade: number = 1// controla o tamanho escolhido pelo usuário
+produtoForm: any;
 
   constructor(
     private produtoService: ProdutoService,
     private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private intemPedidoService: IntemPedidoService
   ) {}
 
   ngOnInit() {
@@ -46,35 +51,49 @@ export class Produtos implements OnInit {
     });
   }
 
+  incrementarQuantidade() {
+  this.quantidade++;
+}
+
+decrementarQuantidade() {
+  if (this.quantidade > 1) {
+    this.quantidade--;
+  }
+}
+
   selecionarTamanho(tamanho: string) {
     this.tamanhoSelecionado = tamanho;
   }
 
-  adicionarAoCarrinho() {
-    if (!this.tamanhoSelecionado) {
-      alert('Por favor, selecione um tamanho antes de adicionar ao carrinho.');
-      return;
-    }
-
-    const item = {
-      produto: this.produto,
-      tamanho: this.tamanhoSelecionado,  // inclui o tamanho no item do carrinho
-      quantidade: 1
-    };
-
-    this.cartService.adicionarAoCarrinho(item).subscribe({
-      next: () => {
-        console.log('Produto adicionado ao carrinho!');
-        this.router.navigate(['/carrinho']);
-      },
-      error: (err) => {
-        console.error('Erro ao adicionar ao carrinho', err);
-      }
-    });
-  }
+  
 
   get temTamanhosDisponiveis(): boolean {
   return !!(this.produto && this.produto.tamanhosDisponiveis && this.produto.tamanhosDisponiveis.length > 0);
 }
+
+finalizarCompra() {
+  const pedido: IntemPedido = {
+    nomeProduto: this.produto.nomeProduto,
+    categoriaProduto: this.produto.categoriaProduto,
+    precoUnitario: this.produto.precoProduto,
+    quantidade: this.produto.quantidade,
+    descricaoProduto: this.produto.descProduto,
+    tamanhosDisponiveis: this.tamanhoSelecionado ? [this.tamanhoSelecionado] : [],
+
+    quantidadeintemCliente: this.quantidade
+  };
+
+  this.intemPedidoService.enviarPedido(pedido).subscribe({
+    next: () => {
+      alert('✅ Pedido enviado com sucesso!');
+      this.router.navigate(['/checkout']);
+    },
+    error: (err) => {
+      console.error(err);
+      alert('❌ Erro ao enviar pedido.');
+    }
+  });
+}
+
 
 }

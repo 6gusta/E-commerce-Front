@@ -10,6 +10,7 @@ export interface Produto {
   categoriaProduto: string;
   estoqueProduto: boolean;
   dataCadastro: string;
+  quantidade: number;
   imagemProduto: string;
    tamanhosDisponiveis?: string[];
 }

@@ -155,3 +155,20 @@ body {
     margin-left: 0;
   }
 }
+.controle-quantidade {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.controle-quantidade button {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.controle-quantidade span {
+  min-width: 20px;
+  text-align: center;
+}

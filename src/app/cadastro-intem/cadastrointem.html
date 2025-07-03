@@ -40,6 +40,15 @@
       Data é obrigatória.
     </div>
 
+ <label for="quantidade">Quantidade de itens</label>
+<input id="quantidade" type="number" formControlName="quantidade" min="0" />
+<div *ngIf="produtoForm.get('quantidade')?.invalid && produtoForm.get('quantidade')?.touched" class="error">
+  A quantidade é obrigatória.
+</div>
+
+
+
+
     <label for="imagemProduto">Imagem do Produto</label>
     <input id="imagemProduto" type="file" accept="image/*" (change)="onImagemChange($event)" />
     <div *ngIf="produtoForm.get('imagemProduto')?.invalid && produtoForm.get('imagemProduto')?.touched" class="error">

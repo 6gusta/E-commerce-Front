@@ -25,6 +25,9 @@ export class ProdutoCadastroComponent {
       categoriaProduto: ['', Validators.required],
       estoqueProduto: [false],
       dataCadastro: ['', Validators.required],
+  quantidade: [null, [Validators.required, Validators.min(0)]],
+
+
       imagemProduto: [null, Validators.required],
       tamanhosDisponiveis: this.fb.array([]) // ← adicionando aqui
     });
@@ -96,6 +99,7 @@ export class ProdutoCadastroComponent {
 
   onSubmit() {
     if (this.produtoForm.valid) {
+       console.log(this.produtoForm.value)
       const produto: Produto = this.produtoForm.value;
 
       this.produtoService.cadastrarProduto(produto).subscribe({

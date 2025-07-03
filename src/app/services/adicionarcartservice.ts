@@ -2,26 +2,32 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+// Interface que representa um item no carrinho
 export interface CartItem {
   produto: {
     nomeProduto: string;
     precoProduto: number;
-    imagemProduto?: string;
+    imagemProduto?: string; // imagem é opcional
   };
   quantidade: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class CartService {
-  private apiUrlAdd = 'http://localhost:8080/cart/adicionar'; // ajuste se necessário
-  private apiUrlList = 'http://localhost:8080/cart/listacart'; // endpoint para listar
+  // URLs da API (ajuste se necessário)
+  private apiUrlAdd = 'http://localhost:8080/cart/adicionar';
+  private apiUrlList = 'http://localhost:8080/cart/listacart';
 
   constructor(private http: HttpClient) {}
 
-  adicionarAoCarrinho(cartItem: any): Observable<any> {
+  // Método para adicionar item ao carrinho
+  adicionarAoCarrinho(cartItem: CartItem): Observable<any> {
     return this.http.post(this.apiUrlAdd, cartItem);
   }
 
+  // Método para listar todos os itens do carrinho
   listarCarrinho(): Observable<CartItem[]> {
     return this.http.get<CartItem[]>(this.apiUrlList);
   }
