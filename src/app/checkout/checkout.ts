@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // IMPORTAR aqui para o ngFor e pipes funcionarem
+import { CommonModule } from '@angular/common';
 import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-service';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule],  // aqui
+  imports: [CommonModule],
   templateUrl: './checkout.html',
   styleUrls: ['./checkout.css']
 })
@@ -19,7 +19,6 @@ export class CheckoutComponent implements OnInit {
   constructor(private intemPedidoService: IntemPedidoService) {}
 
   ngOnInit(): void {
-    // Supondo que busca pedido por ID 1, por exemplo
     this.intemPedidoService.buscarPedidoPorId(1).subscribe({
       next: (pedido) => {
         this.pedido = pedido;
@@ -29,14 +28,19 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  calcularValores() {
-    // Converte BigDecimal para number (caso venha como string ou objeto)
-    const preco = Number(this.pedido.precoUnitario);
-    this.subtotal = preco * this.pedido.quantidadeintemCliente;
+  calcularValores(): void {
+    if (!this.pedido) return;
 
-    // Exemplo fixo de frete, você pode ajustar
+    // Garante que valores sejam convertidos corretamente
+    const preco = Number(this.pedido.precoUnitario);
+    const quantidade = Number(this.pedido.quantidade || this.pedido.quantidadeintemCliente || 1);
+
+    this.subtotal = preco * quantidade;
+
+    // Frete fixo ou calculado
     this.frete = 0;
 
-    this.total = this.subtotal + this.frete;
+    // Se total já veio do back-end, você pode usar direto:
+    this.total = Number(this.pedido.total) || (this.subtotal + this.frete);
   }
 }

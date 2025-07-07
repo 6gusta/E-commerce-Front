@@ -10,6 +10,7 @@ export interface IntemPedido {
   descricaoProduto: string;
   tamanhosDisponiveis: string[];
   quantidadeintemCliente: number;
+  total: number;
 }
 
 @Injectable({

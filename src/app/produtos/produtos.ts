@@ -18,8 +18,10 @@ export class Produtos implements OnInit {
   errorMsg?: string;
 
   tamanhoSelecionado?: string;  
-    quantidade: number = 1// controla o tamanho escolhido pelo usuário
-produtoForm: any;
+  quantidade: number = 1; // controla o tamanho escolhido pelo usuário
+
+  erroTamanho: string = '';
+  erroQuantidade: string = '';
 
   constructor(
     private produtoService: ProdutoService,
@@ -52,48 +54,74 @@ produtoForm: any;
   }
 
   incrementarQuantidade() {
-  this.quantidade++;
-}
-
-decrementarQuantidade() {
-  if (this.quantidade > 1) {
-    this.quantidade--;
+    if (this.quantidade < this.produto.quantidade) {
+      this.quantidade++;
+      this.erroQuantidade = '';
+    } else {
+      this.erroQuantidade = `Quantidade máxima disponível é ${this.produto.quantidade}`;
+    }
   }
-}
+
+  decrementarQuantidade() {
+    if (this.quantidade > 1) {
+      this.quantidade--;
+      this.erroQuantidade = '';
+    }
+  }
 
   selecionarTamanho(tamanho: string) {
     this.tamanhoSelecionado = tamanho;
+    this.erroTamanho = '';
   }
 
-  
-
   get temTamanhosDisponiveis(): boolean {
-  return !!(this.produto && this.produto.tamanhosDisponiveis && this.produto.tamanhosDisponiveis.length > 0);
-}
+    return !!(this.produto && this.produto.tamanhosDisponiveis && this.produto.tamanhosDisponiveis.length > 0);
+  }
 
-finalizarCompra() {
-  const pedido: IntemPedido = {
-    nomeProduto: this.produto.nomeProduto,
-    categoriaProduto: this.produto.categoriaProduto,
-    precoUnitario: this.produto.precoProduto,
-    quantidade: this.produto.quantidade,
-    descricaoProduto: this.produto.descProduto,
-    tamanhosDisponiveis: this.tamanhoSelecionado ? [this.tamanhoSelecionado] : [],
+  validarFormulario(): boolean {
+    let valido = true;
 
-    quantidadeintemCliente: this.quantidade
-  };
-
-  this.intemPedidoService.enviarPedido(pedido).subscribe({
-    next: () => {
-      alert('✅ Pedido enviado com sucesso!');
-      this.router.navigate(['/checkout']);
-    },
-    error: (err) => {
-      console.error(err);
-      alert('❌ Erro ao enviar pedido.');
+    if (!this.tamanhoSelecionado) {
+      this.erroTamanho = 'Por favor, selecione um tamanho.';
+      valido = false;
     }
-  });
-}
 
+    if (this.quantidade < 1) {
+      this.erroQuantidade = 'A quantidade deve ser pelo menos 1.';
+      valido = false;
+    } else if (this.quantidade > this.produto.quantidade) {
+      this.erroQuantidade = `Quantidade máxima disponível é ${this.produto.quantidade}`;
+      valido = false;
+    }
 
+    return valido;
+  }
+
+  finalizarCompra() {
+    if (!this.validarFormulario()) {
+      return; // Não prosseguir se houver erro
+    }
+
+    const pedido: IntemPedido = {
+      nomeProduto: this.produto.nomeProduto,
+      categoriaProduto: this.produto.categoriaProduto,
+      precoUnitario: this.produto.precoProduto,
+      quantidade: this.produto.quantidade,
+      descricaoProduto: this.produto.descProduto,
+      tamanhosDisponiveis: this.tamanhoSelecionado ? [this.tamanhoSelecionado] : [],
+      quantidadeintemCliente: this.quantidade,
+      total: this.produto.total // ou calcule o total aqui se quiser
+    };
+
+    this.intemPedidoService.enviarPedido(pedido).subscribe({
+      next: () => {
+        alert('✅ Pedido enviado com sucesso!');
+        this.router.navigate(['/checkout']);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('❌ Erro ao enviar pedido.');
+      }
+    });
+  }
 }

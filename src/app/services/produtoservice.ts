@@ -13,6 +13,8 @@ export interface Produto {
   quantidade: number;
   imagemProduto: string;
    tamanhosDisponiveis?: string[];
+     total: number;
+     valorPromocional: number;
 }
 
 @Injectable({

@@ -55,19 +55,12 @@
 
   <hr />
 
-  <div class="summary-item">
-    <span>Subtotal:</span>
-    <span>R$ {{ subtotal | number:'1.2-2' }}</span>
-  </div>
+ 
 
-  <div class="summary-item">
-    <span>Frete:</span>
-    <span>R$ {{ frete | number:'1.2-2' }}</span>
-  </div>
-
+  
   <div class="summary-item total">
     <span>Total:</span>
-    <span>R$ {{ total | number:'1.2-2' }}</span>
+    <span>R$ {{ pedido.total| number:'1.2-2' }}</span>
   </div>
 
   <button class="checkout-btn">Confirmar e Pagar</button>

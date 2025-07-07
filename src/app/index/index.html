@@ -45,12 +45,11 @@
 <section class="promocoes">
   <h2>Ofertas da Semana</h2>
   <div class="promocoes-container">
-    <!-- Alterado: usa produtosPromocoes -->
     <div 
       *ngFor="let item of produtosPromocoes" 
       [routerLink]="['/produto', item.idproduto]" 
       class="item" tabindex="0"
-      [attr.aria-label]="'Oferta ' + item.nomeProduto + ' por R$' + item.precoProduto"
+      [attr.aria-label]="'Oferta ' + item.nomeProduto + ' por R$' + item.valorPromocional"
       style="cursor: pointer;"
     >
       <img 
@@ -58,13 +57,17 @@
         [alt]="item.nomeProduto" class="img-produto" 
       />
       <p>{{ item.nomeProduto }}</p>
+      
       <p class="preco">
-        R$ {{ item.precoProduto | number:'1.2-2' }} 
-        <span class="desconto">R$ {{ (item.precoProduto + 50) | number:'1.2-2' }}</span>
+        R$ {{ item.valorPromocional | number:'1.2-2' }}
+        <span class="desconto">
+          R$ {{ item.precoProduto | number:'1.2-2' }}
+        </span>
       </p>
     </div>
   </div>
 </section>
+
 
 <!-- Produtos Populares dinâmica -->
 <section class="carrossel">
