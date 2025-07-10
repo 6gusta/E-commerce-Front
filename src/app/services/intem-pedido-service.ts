@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface IntemPedido {
+   idIntemPedido:number;
   nomeProduto: string;
   categoriaProduto: string;
   precoUnitario: number;
@@ -17,17 +18,33 @@ export interface IntemPedido {
   providedIn: 'root'
 })
 export class IntemPedidoService {
-  private apiUrl = 'http://localhost:8080/intempedido/enviapedidos'; // URL para enviar pedido
-   // URL para listar pedidos
+  private apiUrl = 'http://localhost:8080/intempedido/enviapedidos';
+  private listarPedidoUrl = 'http://localhost:8080/intempedido/listarpedidos';
+  private salvarEnderecoUrl = 'http://localhost:8080/cliente/cadastro'; // base da rota
 
   constructor(private http: HttpClient) {}
 
-  enviarPedido(pedido: IntemPedido): Observable<string> {
-    return this.http.post(this.apiUrl, pedido, { responseType: 'text' });
+  // Corrigido: espera que o backend retorne { idPedido: number }
+  enviarPedido(pedido: IntemPedido): Observable<{ idPedido: number }> {
+    return this.http.post<{ idPedido: number }>(this.apiUrl, pedido);
   }
 
- buscarPedidoPorId(id: number): Observable<IntemPedido> {
-  return this.http.get<IntemPedido>(`http://localhost:8080/intempedido/listarpedidos/${id}`);
+  buscarPedidoPorId(id: number): Observable<IntemPedido> {
+    return this.http.get<IntemPedido>(`${this.listarPedidoUrl}/${id}`);
+  }
+
+
+ salvarEndereco(dadosEntrega: {
+  nome: string;
+  telefone: string;
+  email: string;
+  endereco: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  complemento: string;
+}): Observable<any> {
+  return this.http.post(`${this.salvarEnderecoUrl}`, dadosEntrega);
 }
 
 }

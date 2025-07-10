@@ -1,10 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Produto, ProdutoService } from '../services/produtoservice';
-import { CartService } from '../services/adicionarcartservice';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { CommonModule } from '@angular/common'
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-service';
-
 
 @Component({
   selector: 'app-produtos',
@@ -17,15 +15,14 @@ export class Produtos implements OnInit {
   produto!: Produto;
   errorMsg?: string;
 
-  tamanhoSelecionado?: string;  
-  quantidade: number = 1; // controla o tamanho escolhido pelo usuário
+  tamanhoSelecionado?: string;
+  quantidade: number = 1;
 
   erroTamanho: string = '';
   erroQuantidade: string = '';
 
   constructor(
     private produtoService: ProdutoService,
-    private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
@@ -41,7 +38,7 @@ export class Produtos implements OnInit {
             this.produto = res;
             this.cdr.detectChanges();
           },
-          error: (err) => {
+          error: () => {
             this.errorMsg = 'Erro ao carregar produto';
             this.cdr.detectChanges();
           }
@@ -80,12 +77,10 @@ export class Produtos implements OnInit {
 
   validarFormulario(): boolean {
     let valido = true;
-
     if (!this.tamanhoSelecionado) {
       this.erroTamanho = 'Por favor, selecione um tamanho.';
       valido = false;
     }
-
     if (this.quantidade < 1) {
       this.erroQuantidade = 'A quantidade deve ser pelo menos 1.';
       valido = false;
@@ -93,30 +88,31 @@ export class Produtos implements OnInit {
       this.erroQuantidade = `Quantidade máxima disponível é ${this.produto.quantidade}`;
       valido = false;
     }
-
     return valido;
   }
 
   finalizarCompra() {
     if (!this.validarFormulario()) {
-      return; // Não prosseguir se houver erro
+      return;
     }
 
     const pedido: IntemPedido = {
+      idIntemPedido: this.produto.idproduto,
       nomeProduto: this.produto.nomeProduto,
       categoriaProduto: this.produto.categoriaProduto,
       precoUnitario: this.produto.precoProduto,
-      quantidade: this.produto.quantidade,
+      quantidade: this.quantidade,
       descricaoProduto: this.produto.descProduto,
       tamanhosDisponiveis: this.tamanhoSelecionado ? [this.tamanhoSelecionado] : [],
       quantidadeintemCliente: this.quantidade,
-      total: this.produto.total // ou calcule o total aqui se quiser
+      total: this.produto.precoProduto * this.quantidade
     };
 
     this.intemPedidoService.enviarPedido(pedido).subscribe({
-      next: () => {
+      next: (res) => {
         alert('✅ Pedido enviado com sucesso!');
-        this.router.navigate(['/checkout']);
+        // Redireciona para a página de info do cliente passando o idPedido
+        this.router.navigate(['/infocliente', res.idPedido]);
       },
       error: (err) => {
         console.error(err);

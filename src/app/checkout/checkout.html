@@ -1,67 +1,84 @@
 <div class="container">
   <h1>Finalizar Compra</h1>
+
   <div class="checkout-grid">
-    <div class="form-section">
-      <h2>Endereço de Entrega</h2>
-      <input type="text" placeholder="Nome Completo" />
-      <input type="text" placeholder="Endereço" />
-      <input type="text" placeholder="Cidade" />
-      <input type="text" placeholder="Estado" />
-      <input type="text" placeholder="CEP" />
-      
-      <h2>Informações de Pagamento</h2>
-      <input type="text" placeholder="Número do Cartão" />
-      <input type="text" placeholder="Nome no Cartão" />
-      <div class="payment-fields">
-        <input type="text" placeholder="Data de Validade" />
-        <input type="text" placeholder="CVV" />
+    <!-- Resumo do Pedido -->
+    <div *ngIf="pedido" class="summary-section">
+      <h2>Resumo do Pedido</h2>
+
+      <div class="summary-item">
+        <span>Produto:</span>
+        <span>{{ pedido.nomeProduto }}</span>
       </div>
+
+      <div class="summary-item">
+        <span>Descrição:</span>
+        <span>{{ pedido.descricaoProduto }}</span>
+      </div>
+
+      <div class="summary-item">
+        <span>Tamanho Escolhido:</span>
+        <span>
+          <ng-container *ngFor="let tamanho of pedido.tamanhosDisponiveis; let last = last">
+            {{ tamanho }}<span *ngIf="!last">, </span>
+          </ng-container>
+        </span>
+      </div>
+
+      <div class="summary-item">
+        <span>Preço unitário:</span>
+        <span>R$ {{ pedido.precoUnitario | number:'1.2-2' }}</span>
+      </div>
+
+      <div class="summary-item">
+        <span>Quantidade no pedido:</span>
+        <span>{{ pedido.quantidadeintemCliente }}</span>
+      </div>
+
+      <hr />
+
+      <div class="summary-item total">
+        <span>Total:</span>
+        <span>R$ {{ pedido.total | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Informações de Pagamento -->
+    <div class="form-section">
+      <h2>Informações de Pagamento</h2>
+
+      <label for="paymentMethod">Método de Pagamento</label>
+      <select id="paymentMethod" [(ngModel)]="paymentMethod" name="paymentMethod" (ngModelChange)="onPaymentMethodChange($event)">
+        <option value="">-- Selecione --</option>
+        <option value="dinheiro">Dinheiro</option>
+        <option value="cartao">Cartão</option>
+        <option value="pix">Pix</option>
+      </select>
+
+      <div *ngIf="paymentMethod === 'dinheiro'">
+        <p>Pagamento em dinheiro no momento da entrega.</p>
+         <button (click)="finalizarPagamentoCartao()">Finalizar pagamento</button>
+      </div>
+
+      <div *ngIf="paymentMethod === 'cartao'">
+        <button (click)="finalizarPagamentoCartao()">Finalizar pagamento</button>
+      </div>
+
+      <div *ngIf="paymentMethod === 'pix'">
+        <label>Chave Pix:</label>
+        <div class="pix-key-container">
+          <input type="text" [value]="pixKey" readonly />
+          <button (click)="copyPixKey()">Copiar</button>
+           <button (click)="finalizarPagamentoCartao()">Finalizar pagamento</button>
+        </div>
+        <p *ngIf="timer > 0">Chave expira em: {{ formatTimer(timer) }}</p>
+        <p *ngIf="timer === 0">Chave expirada. <button (click)="regeneratePixKey()">Gerar nova chave</button></p>
+      </div>
+       
       <label>
         <input type="checkbox" /> Usar o mesmo endereço para cobrança
       </label>
+      
     </div>
-<div *ngIf="pedido" class="summary-section">
-  <h2>Resumo do Pedido</h2>
-
-  <div class="summary-item">
-    <span>Produto:</span>
-    <span>{{ pedido.nomeProduto }}</span>
   </div>
-
-
-  <div class="summary-item">
-    <span>Descrição:</span>
-    <span>{{ pedido.descricaoProduto }}</span>
-  </div>
-
-  <div class="summary-item">
-    <span>Tamanho Escolhido:</span>
-    <span>
-      <ng-container *ngFor="let tamanho of pedido.tamanhosDisponiveis; let last = last">
-        {{ tamanho }}<span *ngIf="!last">, </span>
-      </ng-container>
-    </span>
-  </div>
-
-  <div class="summary-item">
-    <span>Preço unitário:</span>
-    <span>R$ {{ pedido.precoUnitario | number:'1.2-2' }}</span>
-  </div>
-
-  <div class="summary-item">
-    <span>Quantidade no pedido:</span>
-    <span>{{ pedido.quantidadeintemCliente }}</span>
-  </div>
-
-  <hr />
-
- 
-
-  
-  <div class="summary-item total">
-    <span>Total:</span>
-    <span>R$ {{ pedido.total| number:'1.2-2' }}</span>
-  </div>
-
-  <button class="checkout-btn">Confirmar e Pagar</button>
 </div>

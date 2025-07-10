@@ -1,0 +1,53 @@
+<div class="container">
+  <h1>Finalizar Compra</h1>
+
+  <!-- Removido o form action/method e adicionado ngSubmit -->
+  <form class="checkout-form" (ngSubmit)="salvarEndereco()">
+    <div class="form-section">
+      <h2>Endereço de Entrega</h2>
+
+      <div class="form-group">
+        <label for="nomeCompleto">Nome Completo</label>
+        <input type="text" id="nomeCompleto" name="nome" [(ngModel)]="cliente.nome" placeholder="Digite seu nome completo" required />
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" name="telefone" [(ngModel)]="cliente.telefone" placeholder="(00) 90000-0000" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" [(ngModel)]="cliente.email" placeholder="seuemail@exemplo.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" name="endereco" [(ngModel)]="cliente.endereco" placeholder="Rua, número, complemento" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" name="cidade" [(ngModel)]="cliente.cidade" placeholder="Digite sua cidade" required />
+      </div>
+
+      <div class="form-group">
+        <label for="estado">Estado (UF)</label>
+        <input type="text" id="estado" name="estado" [(ngModel)]="cliente.estado" placeholder="Ex: SP" maxlength="2" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" name="cep" [(ngModel)]="cliente.cep" placeholder="00000-000" pattern="\d{5}-?\d{3}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="observacoes">Observações</label>
+        <textarea id="observacoes" name="complemento" [(ngModel)]="cliente.complemento" rows="3" placeholder="Alguma informação adicional sobre a entrega?"></textarea>
+      </div>
+    </div>
+
+    <!-- Botão envia via Angular -->
+    <button type="submit">Salvar e Ir para Checkout</button>
+  </form>
+</div>

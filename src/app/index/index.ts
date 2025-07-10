@@ -12,7 +12,6 @@ import { filter, Subscription } from 'rxjs';
   styleUrls: ['./index.css']
 })
 export class Index implements OnInit, OnDestroy {
-  // ✅ Substitui o array único por 3 separados
   produtosNovidades: Produto[] = [];
   produtosPromocoes: Produto[] = [];
   produtosMaisPedidos: Produto[] = [];
@@ -25,14 +24,18 @@ export class Index implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Carrega uma vez ao iniciar
     this.carregarProdutosPorCategoria();
 
-    // Recarrega ao voltar pra /index
+    // Sempre que a rota mudar para /index, recarrega os produtos
     this.routerSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event) => {
       const nav = event as NavigationEnd;
-      if (nav.urlAfterRedirects === '/index') {
+      console.log('URL atual:', nav.urlAfterRedirects);
+
+      // Usa includes para pegar variações como /index ou /index?param=xxx
+      if (nav.urlAfterRedirects.includes('/index')) {
         this.carregarProdutosPorCategoria();
       }
     });
@@ -44,7 +47,6 @@ export class Index implements OnInit, OnDestroy {
     }
   }
 
-  // ✅ Novo método que busca por categoria
   carregarProdutosPorCategoria(): void {
     this.produtoService.getProdutosPorCategoria('NOVIDADES').subscribe({
       next: (res) => this.produtosNovidades = res,
