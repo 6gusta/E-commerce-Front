@@ -1,0 +1,79 @@
+header {
+  background-color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  height: 40PX;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem; /* Dá respiro entre os itens em telas pequenas */
+}
+
+header .logo-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Espaço entre logo e nome */
+}
+
+header nav img {
+  max-width: 70px;
+  height: auto;
+  margin-top: -70PX;
+
+}
+
+header nav h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--primary);
+}
+
+header .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+
+}
+#link{
+  margin-top: -90px;
+}
+
+header nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #111;
+  transition: color 0.2s;
+  
+}
+
+header nav a:hover {
+  color: var(--primary);
+}
+
+header nav .btn-primary {
+  background-color: #4b2c1a !important;
+  color: #fff !important;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  
+}
+
+header nav .btn-primary:hover {
+  background-color: #361d10 !important;
+}
+H2{
+  color: silver;
+  font-size: 60PX;
+    margin-top: -15PX;
+}

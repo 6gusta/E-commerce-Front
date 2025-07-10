@@ -1,20 +1,28 @@
 <header>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <div class="hearts" id="hearts-container"></div>
 
   <nav>
     <div style="display: flex; align-items: center;">
       <img [routerLink]="['/index']" src="assets/logo.png" alt="Logo">
-      <h2 (click)="goHome()">mega</h2>
+      <h2>mega</h2>
     </div>
 
     <div style="display: flex; gap: 1.5rem; align-items: center;" id="link">
-      <button mat-icon-button aria-label="Pesquisar">
-        <mat-icon>search</mat-icon>
-      </button>
       <a routerLink="/index" class="fw-bold">Home</a>
+      <a routerLink="/cadastrointem" class="fw-bold">Cadastrar</a>
       <a routerLink="/produtos" class="fw-bold">Comprar</a>
       <a routerLink="/cadastro" class="fw-bold">Sobre</a>
       <a routerLink="/loginong" class="fw-bold">Contato</a>
+
+      <button mat-icon-button aria-label="Pesquisar">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <button mat-icon-button aria-label="Perfil">
+        <mat-icon routerLink="/minhaconta">person</mat-icon>
+      </button>
     </div>
   </nav>
 </header>

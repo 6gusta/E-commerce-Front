@@ -1,5 +1,9 @@
-<app-header></app-header>
+<app-header *ngIf="!isAdminRoute()"></app-header>
+<app-header-admin *ngIf="isAdminRoute()"></app-header-admin>
+
+
+<!-- Conteúdo das rotas -->
 <router-outlet></router-outlet>
 
-<app-footer></app-footer>
-
+<!-- Rodapé -->
+<app-footer />

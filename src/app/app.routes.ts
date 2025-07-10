@@ -6,19 +6,30 @@ import { Carrinho } from './carrinho/carrinho';
 import { Minhaconta } from './minhaconta/minhaconta';
 import { CheckoutComponent } from './checkout/checkout';
 import { ProdutoCadastroComponent } from './cadastro-intem/cadastrointem';
-import { InfoCliente } from './info-cliente/info-cliente'
-
+import { InfoCliente } from './info-cliente/info-cliente';
+import { LoginAdmin} from './login-admin/login-admin'
 
 export const routes: Routes = [
-     { path: '', component: Home },
-     { path: 'index', component: Index},
-     {path: 'checkout', component: CheckoutComponent},
-     { path: 'produto/:id', component: Produtos },
-      { path: 'checkout/:id', component: CheckoutComponent },
-     {path: 'cadastrointem', component: ProdutoCadastroComponent},
-     {path: 'infocliente', component: InfoCliente},
-     { path: 'infocliente/:id', component: InfoCliente },
+  { path: '', component: Home },
+  { path: 'index', component: Index },
+  { path: 'produto/:id', component: Produtos },
+  { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout/:id', component: CheckoutComponent },
+  { path: 'carrinho', component: Carrinho },
+  { path: 'minhaconta', component: Minhaconta },
+   { path: 'admin', component: LoginAdmin },
+   {path: 'login', component: LoginAdmin},
 
-     {path: 'carrinho', component: Carrinho},
-     {path: 'minhaconta', component: Minhaconta}
+  // ✅ Rotas de cliente
+  { path: 'infocliente', component: InfoCliente },
+  { path: 'infocliente/:id', component: InfoCliente },
+
+  // ✅ Rotas de admin agrupadas sob /admin
+  {
+    path: 'admin',
+    children: [
+      { path: 'cadastrointem', component: ProdutoCadastroComponent }
+      // Você pode adicionar mais aqui depois, tipo admin-dashboard, etc.
+    ]
+  }
 ];
