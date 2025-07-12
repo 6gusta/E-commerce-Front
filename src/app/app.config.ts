@@ -1,3 +1,4 @@
+// app.config.ts
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
@@ -6,8 +7,10 @@ import {
 
 import { provideRouter } from '@angular/router';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http'; // ⬅️ Importação necessária
 
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+
+import { authInterceptor } from './services/auth.interceptor';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -16,6 +19,8 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient() // ⬅️ Aqui resolvemos o problema do HttpClient
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    )
   ]
 };

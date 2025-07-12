@@ -7,7 +7,10 @@ import { Minhaconta } from './minhaconta/minhaconta';
 import { CheckoutComponent } from './checkout/checkout';
 import { ProdutoCadastroComponent } from './cadastro-intem/cadastrointem';
 import { InfoCliente } from './info-cliente/info-cliente';
-import { LoginAdmin} from './login-admin/login-admin'
+import { LoginAdmin } from './login-admin/login-admin';
+import { HomeAdmin } from './home-admin/home-admin';
+
+import { AuthGuard } from './services/auth.guard';  // Importa o guard
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -17,19 +20,23 @@ export const routes: Routes = [
   { path: 'checkout/:id', component: CheckoutComponent },
   { path: 'carrinho', component: Carrinho },
   { path: 'minhaconta', component: Minhaconta },
-   { path: 'admin', component: LoginAdmin },
-   {path: 'login', component: LoginAdmin},
+  { path: 'homeadmin', component: HomeAdmin }, // Se quiser pode remover essa rota fora do /admin
 
-  // ✅ Rotas de cliente
+  // Rotas cliente
   { path: 'infocliente', component: InfoCliente },
   { path: 'infocliente/:id', component: InfoCliente },
 
-  // ✅ Rotas de admin agrupadas sob /admin
+  // Rotas admin com proteção no homeadmin
   {
     path: 'admin',
     children: [
-      { path: 'cadastrointem', component: ProdutoCadastroComponent }
-      // Você pode adicionar mais aqui depois, tipo admin-dashboard, etc.
+      { path: '', component: LoginAdmin },          // /admin
+      { path: 'login', component: LoginAdmin },     // /admin/login
+      { path: 'cadastrointem', component: ProdutoCadastroComponent, canActivate: [AuthGuard] },  // protege cadastro
+      { path: 'homeadmin', component: HomeAdmin, canActivate: [AuthGuard] }                     // protege homeadmin
     ]
-  }
+  },
+
+  // Wildcard para rotas inválidas
+  { path: '**', redirectTo: '' }
 ];
