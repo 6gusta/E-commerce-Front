@@ -25,16 +25,21 @@ export class LoginAdmin {
     private authService: AuthService // INJETANDO AQUI
   ) {}
 
-  fazerLogin() {
-    this.loginService.login(this.login).subscribe({
-      next: (token: string) => {
-        this.authService.setToken(token);  // salva o token usando AuthService
-        alert('Token armazenado: ' + this.authService.getToken());  // mostra o token
-        this.router.navigate(['/admin/homeadmin']);
-      },
-      error: (err) => {
-        alert('Usuario sem permisão ' );
-      }
-    });
-  }
+ fazerLogin() {
+  const dadosLogin = {
+    nome: this.login.nome,
+    senha: this.login.senha
+  };
+
+  this.loginService.login(dadosLogin).subscribe({
+    next: (token: string) => {
+      this.authService.setToken(token);
+      alert('Token armazenado: ' + this.authService.getToken());
+      this.router.navigate(['/admin/homeadmin']);
+    },
+    error: (err) => {
+      alert('Usuário sem permissão');
+    }
+  });
+}
 }

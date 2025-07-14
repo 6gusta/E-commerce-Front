@@ -1,43 +1,76 @@
- <main class="container">
-    <h1>Minha Conta</h1>
+<main class="container">
+  <h1>Minha Conta</h1>
+<section class="user-profile">
+  <img src="assets/logo.png" class="user-photo" alt="Foto do usuário" />
+<h2 class="user-name">{{ adminNome || 'Carregando...' }}</h2>
 
-    <section class="personal-info">
-      <h2>Informações Pessoais</h2>
-      <input type="text" placeholder="Nome" />
-      <input type="email" placeholder="Email" />
-      <input type="tel" placeholder="Telefone" />
-      <button>Editar informações</button>
-    </section>
+<!-- ou, para sempre mostrar o H2 mesmo vazio -->
+<!-- <h2 class="user-name">{{ adminNome || 'Carregando...' }}</h2> -->
 
-    <section class="order-history">
-      <h2>Histórico de Pedidos</h2>
-      <div class="order-table">
-        <div class="order-row header">
-          <div>Pedido</div>
-          <div>Data</div>
-          <div>Status</div>
-          <div>Total</div>
-        </div>
-        <!-- Linhas fictícias -->
-        <div class="order-row">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-        <div class="order-row">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-        <div class="order-row">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-      </div>
-      <button>Ver todos os pedidos</button>
-    </section>
-  </main>
+
+  <button class="logout-btn" (click)="logout()">Sair</button>
+</section>
+
+
+ <section class="sales-summary">
+  <h2>Resumo de Produtos Vendidos</h2>
+
+  <!-- Agrupado por Mês (exemplo: Julho 2025) -->
+  <div class="sales-group">
+    <h3>Julho 2025</h3>
+    
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Status</th>
+          <th>Valor Unitário</th>
+          <th>Quantidade</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Produto A</td>
+          <td>Entregue</td>
+          <td>R$ 50,00</td>
+          <td>10</td>
+          <td>R$ 500,00</td>
+        </tr>
+        <tr>
+          <td>Produto B</td>
+          <td>Em processamento</td>
+          <td>R$ 30,00</td>
+          <td>5</td>
+          <td>R$ 150,00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Outro agrupamento (semana, por exemplo) -->
+  <div class="sales-group">
+    <h3>Semana 01/07 - 07/07</h3>
+    
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Status</th>
+          <th>Valor Unitário</th>
+          <th>Quantidade</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Produto C</td>
+          <td>Entregue</td>
+          <td>R$ 80,00</td>
+          <td>3</td>
+          <td>R$ 240,00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

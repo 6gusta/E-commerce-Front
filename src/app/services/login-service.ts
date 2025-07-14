@@ -13,8 +13,12 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   login(dadosLogin: { nome: string; senha: string }): Observable<string> {
-    return this.http.post(this.apiUrl, dadosLogin, { responseType: 'text' });
-  }
+  return this.http.post(this.apiUrl, dadosLogin, {
+    headers: { 'Content-Type': 'application/json' },
+    responseType: 'text'
+  });
+}
+
 
 
 }
