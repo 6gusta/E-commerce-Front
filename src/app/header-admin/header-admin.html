@@ -17,9 +17,25 @@
       <a routerLink="/cadastro" class="fw-bold">Sobre</a>
       <a routerLink="/loginong" class="fw-bold">Contato</a>
 
-      <button mat-icon-button aria-label="Pesquisar">
-        <mat-icon>search</mat-icon>
-      </button>
+<!-- Botão de pesquisa -->
+<button
+  mat-icon-button
+  aria-label="Pesquisar"
+  [attr.aria-expanded]="showSearch"
+  (click)="toggleSearch()"
+>
+  <mat-icon>search</mat-icon>
+</button>
+
+<!-- Campo de pesquisa -->
+<input
+  *ngIf="showSearch"
+  type="text"
+  placeholder="Pesquisar..."
+  class="search-bar"
+/>
+
+
 
       <button mat-icon-button aria-label="Perfil">
         <mat-icon routerLink="/minhaconta">person</mat-icon>

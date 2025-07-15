@@ -4,13 +4,29 @@
   <nav>
     <div style="display: flex; align-items: center;">
       <img [routerLink]="['/index']" src="assets/logo.png" alt="Logo">
-      <h2 (click)="goHome()">mega</h2>
+      <h2 >mega</h2>
     </div>
 
     <div style="display: flex; gap: 1.5rem; align-items: center;" id="link">
-      <button mat-icon-button aria-label="Pesquisar">
-        <mat-icon>search</mat-icon>
-      </button>
+<button
+  mat-icon-button
+  aria-label="Pesquisar"
+  [attr.aria-expanded]="showSearch"
+  (click)="toggleSearch()"
+>
+  <mat-icon>search</mat-icon>
+</button>
+
+
+<input
+  *ngIf="showSearch"
+  type="text"
+  placeholder="Pesquisar..."
+  class="search-bar"
+  [(ngModel)]="termoBusca"
+  (keyup.enter)="pesquisar()"
+/>
+
       <a routerLink="/index" class="fw-bold">Home</a>
       <a routerLink="/produtos" class="fw-bold">Comprar</a>
       <a routerLink="/cadastro" class="fw-bold">Sobre</a>

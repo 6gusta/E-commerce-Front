@@ -77,3 +77,10 @@ H2{
   font-size: 60PX;
     margin-top: -15PX;
 }
+.search-bar {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-size: 14px;
+}
