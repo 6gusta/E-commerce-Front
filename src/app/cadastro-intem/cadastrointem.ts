@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ProdutoService, Produto } from '../services/produtoservice';
+import { ProdutoService,  } from '../services/produtoservice';
+import { Produtomodel } from '../models/produto.model';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -14,6 +15,13 @@ import { HttpClientModule } from '@angular/common/http';
 export class ProdutoCadastroComponent {
   categorias = ['NOVIDADES', 'PROMOCOES', 'MAISPEDIDOS'];
   tamanhos = ['S', 'M', 'L', 'XL'];
+  tipos = [
+  'CAMISA', 'CALCA', 'CONJUNTO', 'VESTIDO', 'SAIA', 'BERMUDA', 'BLUSA',
+  'JAQUETA', 'CASACO', 'MOLETOM', 'SAPATO', 'TENIS', 'SANDALIA', 'BOTA',
+  'BOLSA', 'MOCHILA', 'ACESSORIO', 'OCULOS', 'RELOGIO', 'MEIA', 'LINGERIE',
+  'PIJAMA', 'CHAPEU', 'CUECA', 'GRAVATA'
+];
+
   produtoForm: FormGroup;
   imagemPreview: string | ArrayBuffer | null = null;
 
@@ -23,6 +31,7 @@ export class ProdutoCadastroComponent {
       descProduto: ['', Validators.required],
       precoProduto: [null, [Validators.required, Validators.min(0)]],
       categoriaProduto: ['', Validators.required],
+      tipo:['', Validators.required],
       estoqueProduto: [false],
       dataCadastro: ['', Validators.required],
       quantidade: [null, [Validators.required, Validators.min(0)]],
@@ -120,7 +129,7 @@ export class ProdutoCadastroComponent {
     console.log('Valor promocional no submit:', this.produtoForm.get('valorPromocional')?.value);
 
     if (this.produtoForm.valid) {
-      const produto: Produto = this.produtoForm.value;
+      const produto: Produtomodel = this.produtoForm.value;
       console.log('Produto a ser enviado:', produto);
       this.produtoService.cadastrarProduto(produto).subscribe({
         next: () => {

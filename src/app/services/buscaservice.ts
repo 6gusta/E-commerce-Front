@@ -18,6 +18,9 @@ export interface Produto {
   providedIn: 'root',
 })
 export class BuscaService {
+  buscarPorTermo(termoBusca: string) {
+    throw new Error('Method not implemented.');
+  }
   private baseUrl = 'http://localhost:8080/buscar/intem';
 
   constructor(private http: HttpClient) {}

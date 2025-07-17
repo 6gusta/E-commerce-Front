@@ -1,4 +1,57 @@
-<section class="novidades">
+<div class="filtro-container">
+
+  <form (submit)="aplicarFiltro(); $event.preventDefault()">
+    <label for="tipo">Tipo:</label>
+    <select [(ngModel)]="filtro.tipo" name="tipo" id="tipo">
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tiposProduto" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <label for="tamanho">Tamanho:</label>
+    <select [(ngModel)]="filtro.tamanho" name="tamanho">
+      <option value="">Todos</option>
+      <option value="P">P</option>
+      <option value="M">M</option>
+      <option value="G">G</option>
+      <option value="GG">GG</option>
+    </select>
+
+    <label for="precoMin">Preço Mínimo:</label>
+    <input type="number" [(ngModel)]="filtro.precoMin" name="precoMin">
+
+    <label for="precoMax">Preço Máximo:</label>
+    <input type="number" [(ngModel)]="filtro.precoMax" name="precoMax">
+
+    <button type="submit">Aplicar Filtro</button>
+    <button type="button" (click)="limparFiltro()">Limpar</button>
+  </form>
+</div>
+
+<!-- ✅ Se houver produtos filtrados, mostrar só eles -->
+<div *ngIf="produtosFiltrados.length > 0">
+  <h3>Resultados do Filtro</h3>
+  <div class="novidades-container">
+    <div 
+      *ngFor="let item of produtosFiltrados" 
+      class="item"
+      [routerLink]="['/produto', item.idproduto]"
+      style="cursor: pointer;"
+    >
+      <img 
+        [src]="item.imagemProduto.startsWith('data:image') ? item.imagemProduto : 'data:image/webp;base64,' + item.imagemProduto"
+        class="img-produto"
+        [alt]="'Imagem do produto ' + item.nomeProduto"
+      />
+      <h3>{{ item.nomeProduto }}</h3>
+      <p>{{ item.descProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number:'1.2-2' }}</p>
+      <button class="btn" (click)="irParaProduto(item.idproduto); $event.stopPropagation()">Detalhes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Mostrar seções padrão só se NÃO tiver filtro -->
+<section class="novidades" *ngIf="produtosFiltrados.length === 0">
   <h2>Novidades fresquinhas</h2>
   <div class="novidades-container">
     <div 
@@ -16,33 +69,19 @@
         [alt]="'Imagem do produto ' + item.nomeProduto"
         class="img-produto"
       />
-
       <h3>{{ item.nomeProduto }}</h3>
-
-      <p class="desc-produto">
-        {{ item.descProduto }}
-      </p>
-
-      <p class="preco">
-        R$ {{ item.precoProduto | number:'1.2-2' }}
-      </p>
-
+      <p class="desc-produto">{{ item.descProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number:'1.2-2' }}</p>
       <button 
         class="btn" 
         (click)="irParaProduto(item.idproduto); $event.stopPropagation()"
         [attr.aria-label]="'Ir para detalhes de ' + item.nomeProduto"
-      >
-        Detalhes
-      </button>
+      >Detalhes</button>
     </div>
   </div>
 </section>
 
-
-
-
-<!-- Seção de promoções dinâmica -->
-<section class="promocoes">
+<section class="promocoes" *ngIf="produtosFiltrados.length === 0">
   <h2>Ofertas da Semana</h2>
   <div class="promocoes-container">
     <div 
@@ -57,23 +96,17 @@
         [alt]="item.nomeProduto" class="img-produto" 
       />
       <p>{{ item.nomeProduto }}</p>
-      
       <p class="preco">
         R$ {{ item.valorPromocional | number:'1.2-2' }}
-        <span class="desconto">
-          R$ {{ item.precoProduto | number:'1.2-2' }}
-        </span>
+        <span class="desconto">R$ {{ item.precoProduto | number:'1.2-2' }}</span>
       </p>
     </div>
   </div>
 </section>
 
-
-<!-- Produtos Populares dinâmica -->
-<section class="carrossel">
+<section class="carrossel" *ngIf="produtosFiltrados.length === 0">
   <h2>Produtos Populares</h2>
   <div class="carrossel-container">
-    <!-- Alterado: usa produtosMaisPedidos -->
     <div 
       *ngFor="let item of produtosMaisPedidos" 
       [routerLink]="['/produto', item.idproduto]" 

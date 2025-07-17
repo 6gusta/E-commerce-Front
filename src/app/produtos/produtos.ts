@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Produto, ProdutoService } from '../services/produtoservice';
+import {  ProdutoService } from '../services/produtoservice';
+import { Produtomodel } from '../models/produto.model';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-service';
@@ -12,7 +13,7 @@ import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-servic
   styleUrls: ['./produtos.css']
 })
 export class Produtos implements OnInit {
-  produto!: Produto;
+  produto!: Produtomodel;
   errorMsg?: string;
 
   tamanhoSelecionado?: string;

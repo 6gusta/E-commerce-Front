@@ -1,21 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Produto {
-  idproduto: number;
-  nomeProduto: string;
-  descProduto: string;
-  precoProduto: number;
-  categoriaProduto: string;
-  estoqueProduto: boolean;
-  dataCadastro: string;
-  quantidade: number;
-  imagemProduto: string;
-   tamanhosDisponiveis?: string[];
-     total: number;
-     valorPromocional: number;
-}
+import { Produtomodel } from '../models/produto.model'; // ✅ Importação correta
 
 @Injectable({
   providedIn: 'root'
@@ -25,20 +11,19 @@ export class ProdutoService {
 
   constructor(private http: HttpClient) {}
 
-  getProdutos(): Observable<Produto[]> {
-    return this.http.get<Produto[]>(`${this.apiUrl}/verproduto`);
+  getProdutos(): Observable<Produtomodel[]> {
+    return this.http.get<Produtomodel[]>(`${this.apiUrl}/verproduto`);
   }
 
-  getProdutoPorId(id: number): Observable<Produto> {
-    return this.http.get<Produto>(`${this.apiUrl}/detalhes/${id}`);
+  getProdutoPorId(id: number): Observable<Produtomodel> {
+    return this.http.get<Produtomodel>(`${this.apiUrl}/detalhes/${id}`);
   }
 
-  getProdutosPorCategoria(categoria: string): Observable<Produto[]> {
-    return this.http.get<Produto[]>(`${this.apiUrl}/categoria/${categoria}`);
+  getProdutosPorCategoria(categoria: string): Observable<Produtomodel[]> {
+    return this.http.get<Produtomodel[]>(`${this.apiUrl}/categoria/${categoria}`);
   }
 
-  // ✅ Novo método de cadastro
-  cadastrarProduto(produto: Produto): Observable<string> {
+  cadastrarProduto(produto: Produtomodel): Observable<string> {
     return this.http.post('http://localhost:8080/produto/register', produto, {
       responseType: 'text',
     });

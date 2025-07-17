@@ -29,6 +29,16 @@
       Categoria é obrigatória.
     </div>
 
+    <label for="tipo">Tipo</label>
+<select id="tipo" formControlName="tipo">
+  <option value="" disabled>Selecione o tipo</option>
+  <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+</select>
+<div *ngIf="produtoForm.get('tipo')?.invalid && produtoForm.get('tipo')?.touched" class="error">
+  Tipo é obrigatório.
+</div>
+
+
     <!-- CAMPO DE PROMOÇÃO -->
     <div *ngIf="produtoForm.get('categoriaProduto')?.value === 'PROMOCOES'">
       <label for="valorPromocional">Valor Promocional</label>
