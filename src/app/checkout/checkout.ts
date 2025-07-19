@@ -114,20 +114,29 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   // <-- Método que faltava: botão finaliza pagamento cartão
-  finalizarPagamentoCartao() {
-    this.http.post<any>('http://localhost:8080/metodo/pagamentocartao', {})
-      .subscribe({
-        next: (res) => {
-          if (res.url) {
-            window.location.href = res.url;  // redireciona para a página do Stripe
-          } else {
-            alert('Não foi possível iniciar o pagamento.');
-          }
-        },
-        error: (err) => {
-          console.error('Erro no pagamento:', err);
-          alert('Erro ao tentar realizar o pagamento.');
-        }
-      });
+ finalizarPagamentoCartao() {
+  // Acesse o id do pedido correto
+  const pedidoId = this.pedido.idIntemPedido;  // Use idIntemPedido para garantir que está correto
+
+  if (!pedidoId) {
+    alert('ID do pedido não encontrado!');
+    return;
   }
+
+  // Envie o ID do pedido para o backend
+  this.http.post<any>('http://localhost:8080/metodo/pagamentocartao', { idPedido: pedidoId })
+    .subscribe({
+      next: (res) => {
+        if (res.url) {
+          window.location.href = res.url;  // Redireciona para a página do Stripe
+        } else {
+          alert('Não foi possível iniciar o pagamento.');
+        }
+      },
+      error: (err) => {
+        console.error('Erro no pagamento:', err);
+        alert('Erro ao tentar realizar o pagamento.');
+      }
+    });
+}
 }

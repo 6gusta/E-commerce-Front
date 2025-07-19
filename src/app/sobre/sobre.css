@@ -1,0 +1,38 @@
+.sobre-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fffdfd;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.sobre-container h1 {
+  text-align: center;
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.texto p {
+  font-size: 18px;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.texto p strong {
+  color: #000;
+}
+
+.imagem {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.imagem img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

@@ -9,6 +9,10 @@ import { ProdutoCadastroComponent } from './cadastro-intem/cadastrointem';
 import { InfoCliente } from './info-cliente/info-cliente';
 import { LoginAdmin } from './login-admin/login-admin';
 import { HomeAdmin } from './home-admin/home-admin';
+import { Sucesso } from './sucesso/sucesso';
+import { Erro } from './erro/erro';
+import { Sobre } from './sobre/sobre';
+import { Contato } from './contato/contato';
 
 import { AuthGuard } from './services/auth.guard';  // Importa o guard
 
@@ -19,9 +23,11 @@ export const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'checkout/:id', component: CheckoutComponent },
   { path: 'carrinho', component: Carrinho },
-  { path: 'minhaconta', component: Minhaconta },
-  { path: 'homeadmin', component: HomeAdmin }, // Se quiser pode remover essa rota fora do /admin
-
+  {path: 'sobre' , component: Sobre},
+  {path: 'contato', component: Contato},
+  {path: 'sucesso', component: Sucesso},
+  {path: 'erro', component: Erro},
+  
   // Rotas cliente
   { path: 'infocliente', component: InfoCliente },
   { path: 'infocliente/:id', component: InfoCliente },
@@ -30,10 +36,12 @@ export const routes: Routes = [
   {
     path: 'admin',
     children: [
-      { path: '', component: LoginAdmin },          // /admin
+      { path: '', component: LoginAdmin },    
       { path: 'login', component: LoginAdmin },     // /admin/login
       { path: 'cadastrointem', component: ProdutoCadastroComponent, canActivate: [AuthGuard] },  // protege cadastro
-      { path: 'homeadmin', component: HomeAdmin, canActivate: [AuthGuard] }                     // protege homeadmin
+      { path: 'homeadmin', component: HomeAdmin, canActivate: [AuthGuard] },     
+        { path: 'minhaconta', component: Minhaconta, canActivate: [AuthGuard] }
+                      
     ]
   },
 

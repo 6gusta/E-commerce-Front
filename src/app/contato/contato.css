@@ -1,0 +1,56 @@
+.contato-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h2, h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.info-contato p {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #444;
+  text-align: center;
+}
+
+.faq {
+  margin-top: 30px;
+}
+
+.faq-item {
+  margin-bottom: 15px;
+}
+
+.faq-item button {
+  width: 100%;
+  text-align: left;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  transition: background-color 0.3s;
+}
+
+.faq-item button:hover {
+  background-color: #f1f1f1;
+}
+
+.resposta {
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border-left: 4px solid #007BFF;
+  margin-top: 5px;
+  border-radius: 4px;
+}

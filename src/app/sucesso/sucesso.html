@@ -1,0 +1,13 @@
+<div class="mensagem-container sucesso">
+  <h1>✅ Pagamento aprovado!</h1>
+  <p>Obrigado pela sua compra. Seu pedido foi processado com sucesso.</p>
+
+  <div class="rastreamento">
+    <p><strong>Código de rastreamento:</strong> {{ codigoRastreamento }}</p>
+    <a [href]="'https://www2.correios.com.br/sistemas/rastreamento/default.cfm'" target="_blank" class="botao-rastrear">
+      Rastrear no site dos Correios
+    </a>
+  </div>
+
+  <a routerLink="/index" class="botao-voltar">Voltar à loja</a>
+</div>

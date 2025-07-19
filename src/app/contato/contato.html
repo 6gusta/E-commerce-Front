@@ -1,0 +1,23 @@
+<section class="contato-container">
+  <h2>Suporte ao Cliente</h2>
+
+  <div class="info-contato">
+    <p><strong>Telefone:</strong> (11) 99999-8888</p>
+    <p><strong>E-mail:</strong> suportelojaroupas.com</p>
+    <p><strong>Atendimento:</strong> Segunda a sexta, das 9h às 18h</p>
+  </div>
+
+  <h3>Perguntas Frequentes</h3>
+
+  <div class="faq">
+    <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+      <button (click)="toggleFAQ(i)">
+        {{ faq.pergunta }}
+        <span>{{ faqAtivoIndex === i ? '-' : '+' }}</span>
+      </button>
+      <div class="resposta" *ngIf="faqAtivoIndex === i">
+        <p>{{ faq.resposta }}</p>
+      </div>
+    </div>
+  </div>
+</section>
