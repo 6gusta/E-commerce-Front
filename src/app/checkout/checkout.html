@@ -50,35 +50,37 @@
       <label for="paymentMethod">Método de Pagamento</label>
       <select id="paymentMethod" [(ngModel)]="paymentMethod" name="paymentMethod" (ngModelChange)="onPaymentMethodChange($event)">
         <option value="">-- Selecione --</option>
-        <option value="dinheiro">Dinheiro</option>
+   
         <option value="cartao">Cartão</option>
         <option value="pix">Pix</option>
       </select>
 
-      <div *ngIf="paymentMethod === 'dinheiro'">
-        <p>Pagamento em dinheiro no momento da entrega.</p>
-         <button (click)="finalizarPagamentoCartao()">Finalizar pagamento</button>
-      </div>
+     
 
       <div *ngIf="paymentMethod === 'cartao'">
         <button (click)="finalizarPagamentoCartao()">Finalizar pagamento</button>
       </div>
 
-      <div *ngIf="paymentMethod === 'pix'">
-        <label>Chave Pix:</label>
-        <div class="pix-key-container">
-          <input type="text" [value]="pixKey" readonly />
-          <button (click)="copyPixKey()">Copiar</button>
-           <button (click)="finalizarPagamentoCartao()">Finalizar pagamento</button>
-        </div>
-        <p *ngIf="timer > 0">Chave expira em: {{ formatTimer(timer) }}</p>
-        <p *ngIf="timer === 0">Chave expirada. <button (click)="regeneratePixKey()">Gerar nova chave</button></p>
-      </div>
-       
-      <label>
-        <input type="checkbox" /> Usar o mesmo endereço para cobrança
-      </label>
-      
-    </div>
+     <div *ngIf="paymentMethod === 'pix'">
+  <label>Chave Pix:</label>
+  <div class="pix-key-container">
+    <input type="text" [value]="pixKey" readonly />
+    <button (click)="copyPixKey()">Copiar</button>
   </div>
+
+  <p *ngIf="pixQRCodeImage">QR Code Pix:</p>
+  <img *ngIf="pixQRCodeImage" [src]="pixQRCodeImage" alt="QR Code Pix" style="width: 200px;" />
+
+  <p *ngIf="timer > 0">Chave expira em: {{ formatTimer(timer) }}</p>
+  <p *ngIf="timer === 0">Chave expirada. <button (click)="regeneratePixKey()">Gerar nova chave</button></p>
+
+  <a 
+  href="https://wa.me/5561991763642?text=Olá!%20Acabei%20de%20fazer%20o%20pagamento%20via%20Pix.%20Segue%20o%20comprovante:%20"
+  target="_blank">
+  Enviar comprovante via WhatsApp
+</a>
+
+</div>
+
+
 </div>

@@ -1,8 +1,7 @@
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';  // IMPORTAÇÃO NECESSÁRIA
+import { HttpClient } from '@angular/common/http';
 import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-service';
 
 @Component({
@@ -16,6 +15,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   paymentMethod: string = '';
   pixKey: string = '';
+  pixQRCodeImage: string = '';
   timer: number = 0;
   private intervalId: any;
 
@@ -24,7 +24,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   frete = 0;
   total = 0;
 
-  constructor(private intemPedidoService: IntemPedidoService, private http: HttpClient) {}  // INJETAR HttpClient
+  constructor(private intemPedidoService: IntemPedidoService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.intemPedidoService.buscarPedidoPorId(1).subscribe({
@@ -43,7 +43,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const quantidade = Number(this.pedido.quantidade || this.pedido.quantidadeintemCliente || 1);
 
     this.subtotal = preco * quantidade;
-    this.frete = 0; // ou lógica para frete
+    this.frete = 0;
     this.total = Number(this.pedido.total) || (this.subtotal + this.frete);
   }
 
@@ -52,29 +52,35 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.clearTimer();
 
     if (value === 'pix') {
-      this.regeneratePixKey();
+      this.chamarPixQRCode();
     } else {
       this.pixKey = '';
+      this.pixQRCodeImage = '';
     }
   }
 
-  generateRandomPixKey(): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let key = '';
-    for (let i = 0; i < 16; i++) {
-      key += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return key;
-  }
+  chamarPixQRCode() {
+   this.http.get<{ payload: string, qrcodeBase64: string }>('http://localhost:8080/pix/pix/qrcode', {
+  params: { idIntemPedido: this.pedido.idIntemPedido.toString() }
+})
 
-  regeneratePixKey() {
-    this.pixKey = this.generateRandomPixKey();
-    this.startTimer(10 * 60 * 1000); // 10 minutos em ms
+      .subscribe({
+        next: (res) => {
+          this.pixKey = res.payload;
+          this.pixQRCodeImage = res.qrcodeBase64;
+          this.startTimer(10 * 60 * 1000);
+        },
+        error: (err) => {
+          console.error('Erro ao gerar QR Code PIX:', err);
+          alert('Erro ao gerar QR Code Pix. Tente novamente.');
+        }
+      });
   }
 
   startTimer(duration: number) {
-    this.timer = duration;
     this.clearTimer();
+    this.timer = duration;
+
     this.intervalId = setInterval(() => {
       this.timer -= 1000;
 
@@ -109,34 +115,34 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return `${minutesStr}:${secondsStr}`;
   }
 
+  regeneratePixKey() {
+    this.chamarPixQRCode();
+  }
+
+  finalizarPagamentoCartao() {
+    const pedidoId = this.pedido.idIntemPedido;
+    if (!pedidoId) {
+      alert('ID do pedido não encontrado!');
+      return;
+    }
+
+    this.http.post<any>('http://localhost:8080/metodo/pagamentocartao', { idPedido: pedidoId })
+      .subscribe({
+        next: (res) => {
+          if (res.url) {
+            window.location.href = res.url;
+          } else {
+            alert('Não foi possível iniciar o pagamento.');
+          }
+        },
+        error: (err) => {
+          console.error('Erro no pagamento:', err);
+          alert('Erro ao tentar realizar o pagamento.');
+        }
+      });
+  }
+
   ngOnDestroy() {
     this.clearTimer();
   }
-
-  // <-- Método que faltava: botão finaliza pagamento cartão
- finalizarPagamentoCartao() {
-  // Acesse o id do pedido correto
-  const pedidoId = this.pedido.idIntemPedido;  // Use idIntemPedido para garantir que está correto
-
-  if (!pedidoId) {
-    alert('ID do pedido não encontrado!');
-    return;
-  }
-
-  // Envie o ID do pedido para o backend
-  this.http.post<any>('http://localhost:8080/metodo/pagamentocartao', { idPedido: pedidoId })
-    .subscribe({
-      next: (res) => {
-        if (res.url) {
-          window.location.href = res.url;  // Redireciona para a página do Stripe
-        } else {
-          alert('Não foi possível iniciar o pagamento.');
-        }
-      },
-      error: (err) => {
-        console.error('Erro no pagamento:', err);
-        alert('Erro ao tentar realizar o pagamento.');
-      }
-    });
-}
 }
