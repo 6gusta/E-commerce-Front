@@ -1,1 +1,153 @@
-<p>home-admin works!</p>
+<div class="filtro-container">
+  <form (submit)="aplicarFiltro(); $event.preventDefault()">
+    <label for="tipo">Tipo:</label>
+    <select [(ngModel)]="filtro.tipo" name="tipo" id="tipo">
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tiposProduto" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <label for="tamanho">Tamanho:</label>
+    <select [(ngModel)]="filtro.tamanho" name="tamanho" id="tamanho">
+      <option value="">Todos</option>
+      <option value="P">P</option>
+      <option value="M">M</option>
+      <option value="G">G</option>
+      <option value="GG">GG</option>
+    </select>
+
+    <label for="precoMin">Preço Mínimo:</label>
+    <input type="number" [(ngModel)]="filtro.precoMin" name="precoMin" id="precoMin" />
+
+    <label for="precoMax">Preço Máximo:</label>
+    <input type="number" [(ngModel)]="filtro.precoMax" name="precoMax" id="precoMax" />
+
+    <button type="submit">Aplicar Filtro</button>
+    <button type="button" (click)="limparFiltro()">Limpar</button>
+  </form>
+</div>
+
+<!-- Produtos Filtrados - Modo Admin com botões -->
+<div *ngIf="produtosFiltrados.length > 0">
+  <h3>Resultados do Filtro (Admin)</h3>
+  <div class="novidades-container">
+    <div 
+      *ngFor="let item of produtosFiltrados" 
+      class="item"
+      [routerLink]="['/produto', item.idproduto]"
+      style="cursor: pointer;"
+    >
+      <img
+        [src]="
+          item.imagemProduto.startsWith('data:image') 
+            ? item.imagemProduto 
+            : 'data:image/webp;base64,' + item.imagemProduto
+        "
+        class="img-produto"
+        [alt]="'Imagem do produto ' + item.nomeProduto"
+      />
+      <h3>{{ item.nomeProduto }}</h3>
+      <p>{{ item.descProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number : '1.2-2' }}</p>
+
+      <!-- Botões Editar e Excluir -->
+      <div class="botoes-container" (click)="$event.stopPropagation()">
+        <button class="btn-editar" (click)="editarProduto(item)">Editar</button>
+        <button class="btn-excluir" (click)="excluirProduto(item.idproduto)">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Seções padrão com botões admin - Novidades -->
+<section class="novidades" *ngIf="produtosFiltrados.length === 0">
+  <h2>Novidades (Admin)</h2>
+  <div class="novidades-container">
+    <div 
+      *ngFor="let item of produtosNovidades" 
+      class="item"
+      [routerLink]="['/produto', item.idproduto]"
+      style="cursor: pointer;"
+    >
+      <img
+        [src]="
+          item.imagemProduto.startsWith('data:image') 
+            ? item.imagemProduto 
+            : 'data:image/webp;base64,' + item.imagemProduto
+        "
+        class="img-produto"
+        [alt]="'Imagem do produto ' + item.nomeProduto"
+      />
+      <h3>{{ item.nomeProduto }}</h3>
+      <p class="desc-produto">{{ item.descProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number : '1.2-2' }}</p>
+
+      <div class="botoes-container" (click)="$event.stopPropagation()">
+        <button class="btn-editar" (click)="editarProduto(item)">Editar</button>
+        <button class="btn-excluir" (click)="excluirProduto(item.idproduto)">Excluir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Seção Promoções com botões admin -->
+<section class="promocoes" *ngIf="produtosFiltrados.length === 0">
+  <h2>Ofertas da Semana (Admin)</h2>
+  <div class="promocoes-container">
+    <div 
+      *ngFor="let item of produtosPromocoes" 
+      class="item"
+      [routerLink]="['/produto', item.idproduto]"
+      style="cursor: pointer;"
+    >
+      <img
+        [src]="
+          item.imagemProduto.startsWith('data:image') 
+            ? item.imagemProduto 
+            : 'data:image/webp;base64,' + item.imagemProduto
+        "
+        class="img-produto"
+        [alt]="item.nomeProduto"
+      />
+      <p>{{ item.nomeProduto }}</p>
+      <p class="preco">
+        R$ {{ item.valorPromocional | number : '1.2-2' }}
+        <span class="desconto">R$ {{ item.precoProduto | number : '1.2-2' }}</span>
+      </p>
+
+      <div class="botoes-container" (click)="$event.stopPropagation()">
+        <button class="btn-editar" (click)="editarProduto(item)">Editar</button>
+        <button class="btn-excluir" (click)="excluirProduto(item.idproduto)">Excluir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Seção Produtos Populares com botões admin -->
+<section class="carrossel" *ngIf="produtosFiltrados.length === 0">
+  <h2>Produtos Populares (Admin)</h2>
+  <div class="carrossel-container">
+    <div 
+      *ngFor="let item of produtosMaisPedidos" 
+      class="item"
+      [routerLink]="['/produto', item.idproduto]"
+      style="cursor: pointer;"
+    >
+      <img
+        [src]="
+          item.imagemProduto.startsWith('data:image') 
+            ? item.imagemProduto 
+            : 'data:image/webp;base64,' + item.imagemProduto
+        "
+        class="img-produto"
+        [alt]="item.nomeProduto"
+      />
+      <p>{{ item.nomeProduto }}</p>
+      <p class="preco">R$ {{ item.precoProduto | number : '1.2-2' }}</p>
+
+      <div class="botoes-container" (click)="$event.stopPropagation()">
+        <button class="btn-editar" (click)="editarProduto(item)">Editar</button>
+        <button class="btn-excluir" (click)="excluirProduto(item.idproduto)">Excluir</button>
+      </div>
+    </div>
+  </div>
+</section>

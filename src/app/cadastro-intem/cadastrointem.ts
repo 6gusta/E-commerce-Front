@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ProdutoService,  } from '../services/produtoservice';
+import { ProdutoService } from '../services/produtoservice';
 import { Produtomodel } from '../models/produto.model';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -12,26 +12,29 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './cadastrointem.html',
   styleUrls: ['./cadastrointem.css']
 })
-export class ProdutoCadastroComponent {
+export class ProdutoCadastroComponent implements OnInit {
   categorias = ['NOVIDADES', 'PROMOCOES', 'MAISPEDIDOS'];
   tamanhos = ['S', 'M', 'L', 'XL'];
   tipos = [
-  'CAMISA', 'CALCA', 'CONJUNTO', 'VESTIDO', 'SAIA', 'BERMUDA', 'BLUSA',
-  'JAQUETA', 'CASACO', 'MOLETOM', 'SAPATO', 'TENIS', 'SANDALIA', 'BOTA',
-  'BOLSA', 'MOCHILA', 'ACESSORIO', 'OCULOS', 'RELOGIO', 'MEIA', 'LINGERIE',
-  'PIJAMA', 'CHAPEU', 'CUECA', 'GRAVATA'
-];
+    'CAMISA', 'CALCA', 'CONJUNTO', 'VESTIDO', 'SAIA', 'BERMUDA', 'BLUSA',
+    'JAQUETA', 'CASACO', 'MOLETOM', 'SAPATO', 'TENIS', 'SANDALIA', 'BOTA',
+    'BOLSA', 'MOCHILA', 'ACESSORIO', 'OCULOS', 'RELOGIO', 'MEIA', 'LINGERIE',
+    'PIJAMA', 'CHAPEU', 'CUECA', 'GRAVATA'
+  ];
 
   produtoForm: FormGroup;
   imagemPreview: string | ArrayBuffer | null = null;
+  estaEditando = false;
+  carregando = false; // para controle de loading (ex: botão desabilitado)
 
   constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
     this.produtoForm = this.fb.group({
+      idproduto: [null],
       nomeProduto: ['', Validators.required],
       descProduto: ['', Validators.required],
       precoProduto: [null, [Validators.required, Validators.min(0)]],
       categoriaProduto: ['', Validators.required],
-      tipo:['', Validators.required],
+      tipo: ['', Validators.required],
       estoqueProduto: [false],
       dataCadastro: ['', Validators.required],
       quantidade: [null, [Validators.required, Validators.min(0)]],
@@ -40,27 +43,24 @@ export class ProdutoCadastroComponent {
       valorPromocional: [null]
     });
 
-    console.log('Form inicial:', this.produtoForm.value);
-
-    // 🔁 Validação dinâmica do campo de promoção
+    // Validação dinâmica do campo valorPromocional
     this.produtoForm.get('categoriaProduto')?.valueChanges.subscribe(categoria => {
-      console.log('Categoria mudou para:', categoria);
       const promoControl = this.produtoForm.get('valorPromocional');
       if (categoria === 'PROMOCOES') {
         promoControl?.setValidators([Validators.required, Validators.min(0)]);
-        console.log('Validadores de valorPromocional definidos:', promoControl?.validator);
       } else {
         promoControl?.clearValidators();
         promoControl?.setValue(null);
-        console.log('Validadores de valorPromocional limpos e valor setado para null');
       }
       promoControl?.updateValueAndValidity();
-      console.log('Valor promocional após updateValueAndValidity:', promoControl?.value);
     });
+  }
 
-    this.produtoForm.get('valorPromocional')?.valueChanges.subscribe(valor => {
-      console.log('valorPromocional mudou para:', valor);
-    });
+  ngOnInit(): void {
+    const state = history.state;
+    if (state && state.produto) {
+      this.carregarProdutoParaEdicao(state.produto);
+    }
   }
 
   get tamanhosDisponiveis(): FormArray {
@@ -73,18 +73,14 @@ export class ProdutoCadastroComponent {
 
     if (event.target.checked) {
       formArray.push(this.fb.control(value));
-      console.log('Tamanho selecionado:', value);
     } else {
       const index = formArray.controls.findIndex(x => x.value === value);
-      formArray.removeAt(index);
-      console.log('Tamanho desmarcado:', value);
+      if (index >= 0) formArray.removeAt(index);
     }
-    console.log('Tamanhos disponíveis:', formArray.value);
   }
 
   onImagemChange(event: any): void {
     const file = event.target.files[0];
-    console.log('Imagem selecionada:', file);
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -110,10 +106,8 @@ export class ProdutoCadastroComponent {
           if (ctx) {
             ctx.drawImage(img, 0, 0, width, height);
             const resizedBase64 = canvas.toDataURL('image/webp');
-            console.log('Imagem convertida para base64:', resizedBase64);
             this.imagemPreview = resizedBase64;
             this.produtoForm.patchValue({ imagemProduto: resizedBase64 });
-            console.log('Form valorImagem atualizado:', this.produtoForm.get('imagemProduto')?.value);
           }
         };
         img.src = e.target.result;
@@ -122,29 +116,86 @@ export class ProdutoCadastroComponent {
     }
   }
 
-  onSubmit() {
-    console.log('==== SUBMIT ====');
-    console.log('Form valid?', this.produtoForm.valid);
-    console.log('Form Value no submit:', this.produtoForm.value);
-    console.log('Valor promocional no submit:', this.produtoForm.get('valorPromocional')?.value);
+  carregarProdutoParaEdicao(produto: any) {
+    this.estaEditando = true;
 
-    if (this.produtoForm.valid) {
-      const produto: Produtomodel = this.produtoForm.value;
-      console.log('Produto a ser enviado:', produto);
+    // Limpar tamanhos antigos
+    while (this.tamanhosDisponiveis.length !== 0) {
+      this.tamanhosDisponiveis.removeAt(0);
+    }
+
+    if (produto.tamanhosDisponiveis) {
+      produto.tamanhosDisponiveis.forEach((tamanho: string) => {
+        this.tamanhosDisponiveis.push(this.fb.control(tamanho));
+      });
+    }
+
+    this.produtoForm.patchValue({
+      idproduto: produto.idproduto,
+      nomeProduto: produto.nomeProduto,
+      descProduto: produto.descProduto,
+      precoProduto: produto.precoProduto,
+      categoriaProduto: produto.categoriaProduto,
+      tipo: produto.tipo,
+      valorPromocional: produto.valorPromocional,
+      estoqueProduto: produto.estoqueProduto,
+      dataCadastro: produto.dataCadastro,
+      quantidade: produto.quantidade,
+      imagemProduto: produto.imagemProduto
+    });
+
+    this.imagemPreview = produto.imagemProduto;
+  }
+
+  cancelarEdicao() {
+    this.estaEditando = false;
+    this.produtoForm.reset();
+    this.imagemPreview = null;
+
+    // Limpar tamanhos também ao cancelar
+    while (this.tamanhosDisponiveis.length !== 0) {
+      this.tamanhosDisponiveis.removeAt(0);
+    }
+  }
+
+  onSubmit() {
+    if (this.produtoForm.invalid) {
+      this.produtoForm.markAllAsTouched();
+      alert('⚠️ Preencha todos os campos obrigatórios!');
+      return;
+    }
+
+    this.carregando = true;
+
+    const produto: Produtomodel = this.produtoForm.value;
+
+    if (this.estaEditando) {
+      this.produtoService.atualizarProduto(produto.idproduto, produto).subscribe({
+        next: () => {
+          alert('✅ Produto atualizado com sucesso!');
+          this.cancelarEdicao();
+          this.carregando = false;
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar produto:', err);
+          alert('❌ Erro ao atualizar produto.');
+          this.carregando = false;
+        }
+      });
+    } else {
       this.produtoService.cadastrarProduto(produto).subscribe({
         next: () => {
           alert('✅ Produto cadastrado com sucesso!');
           this.produtoForm.reset();
           this.imagemPreview = null;
-          console.log('Form resetado após cadastro');
+          this.carregando = false;
         },
         error: (err) => {
-          console.error('Erro ao cadastrar:', err);
-          alert('❌ Ocorreu um erro ao cadastrar o produto.');
+          console.error('Erro ao cadastrar produto:', err);
+          alert('❌ Erro ao cadastrar produto.');
+          this.carregando = false;
         }
       });
-    } else {
-      alert('⚠️ Preencha todos os campos obrigatórios!');
     }
   }
 }

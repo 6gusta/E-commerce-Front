@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Produtomodel } from '../models/produto.model'; // ✅ Importação correta
+import { Observable, BehaviorSubject } from 'rxjs';
+import { Produtomodel } from '../models/produto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +27,20 @@ export class ProdutoService {
     return this.http.post('http://localhost:8080/produto/register', produto, {
       responseType: 'text',
     });
+  }
+
+  atualizarProduto(id: number, produto: Produtomodel): Observable<Produtomodel> {
+    return this.http.put<Produtomodel>(`http://localhost:8080/admin/up/${id}`, produto);
+  }
+
+  private produtoEditandoSubject = new BehaviorSubject<Produtomodel | null>(null);
+  produtoEditando$ = this.produtoEditandoSubject.asObservable();
+
+  setProdutoEditando(produto: Produtomodel | null) {
+    this.produtoEditandoSubject.next(produto);
+  }
+
+  getProdutoEditando(): Produtomodel | null {
+    return this.produtoEditandoSubject.getValue();
   }
 }
