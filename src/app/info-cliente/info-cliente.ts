@@ -1,21 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { IntemPedidoService, IntemPedido } from '../services/intem-pedido-service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-info-cliente',
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule,  FormsModule],
   templateUrl: './info-cliente.html',
-  styleUrls: ['./info-cliente.css']
+  styleUrls: ['./info-cliente.css'],
+   imports: [CommonModule, FormsModule]
 })
 export class InfoCliente implements OnInit {
 
-  pedido!: IntemPedido;  
-  
+  pedido!: IntemPedido;
   cliente = {
     nome: '',
     telefone: '',
@@ -29,40 +26,61 @@ export class InfoCliente implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private intemPedidoService: IntemPedidoService
   ) {}
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.intemPedidoService.buscarPedidoPorId(id).subscribe({
-        next: pedido => this.pedido = pedido,
-        error: err => console.error('Erro ao buscar pedido:', err)
-      });
-    } else {
-      console.warn('ID do pedido inválido ou não informado na rota.');
-    }
+  const pedidoParcialJson = localStorage.getItem('pedidoParcial');
+  if (pedidoParcialJson) {
+    this.pedido = JSON.parse(pedidoParcialJson);
+  } else {
+    console.warn('Pedido parcial não encontrado no localStorage');
   }
-
-  irParaCheckout(idPedido: number) {
-    this.router.navigate(['/checkout', idPedido]);
-  }
+}
 
 salvarEndereco() {
-  this.intemPedidoService.salvarEndereco(this.cliente).subscribe({
-    next: (res) => {
-      console.log('Endereço salvo com sucesso:', res);
-      this.irParaCheckout(this.pedido.idIntemPedido);
+  const produtoSelecionadoJson = localStorage.getItem('produtoSelecionado');
+  if (!produtoSelecionadoJson) {
+    alert('Produto não encontrado. Volte e selecione um produto.');
+    return;
+  }
+
+  const produtoSelecionado = JSON.parse(produtoSelecionadoJson);
+
+  // 1️⃣ Salva o cliente primeiro
+  this.intemPedidoService.cadastrarCliente(this.cliente).subscribe({
+    next: (clienteCriado) => {
+      console.log('Cliente salvo:', clienteCriado);
+
+      // 2️⃣ Monta o pedido incluindo o cliente corretamente
+      const pedidoCompletoDTO = {
+        ...produtoSelecionado,
+        cliente: {
+          idCliente: clienteCriado.idCliente
+        }
+      };
+
+      // 3️⃣ Salva o pedido
+      this.intemPedidoService.criarPedido(pedidoCompletoDTO).subscribe({
+        next: (pedidoCriado) => {
+          alert('Pedido criado com sucesso!');
+          localStorage.removeItem('produtoSelecionado');
+         this.router.navigate(['/checkout', pedidoCriado.idPedido]); // CORRETO
+
+        },
+        error: (err) => {
+          console.error('Erro ao criar pedido:', err);
+          alert('Erro ao criar pedido.');
+        }
+      });
     },
     error: (err) => {
-      if (err.status === 200) {
-            alert('✅ Produto cadastrado com sucesso!');
-        this.irParaCheckout(this.pedido.idIntemPedido);
-      } else {
-        console.error('Erro ao salvar endereço:', err);
-      }
+      console.error('Erro ao salvar cliente:', err);
+      alert('Erro ao salvar cliente.');
     }
   });
 }
+
+
+
 }

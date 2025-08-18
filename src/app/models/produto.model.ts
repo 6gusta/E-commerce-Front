@@ -2,7 +2,7 @@ export interface Produtomodel {
   idproduto: number;
   nomeProduto: string;
   descProduto: string;
-  precoProduto: number;
+  precoProduto: 0;
   categoriaProduto: string;
   tipo: string;
   estoqueProduto: boolean;

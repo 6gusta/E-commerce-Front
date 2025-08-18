@@ -19,7 +19,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   timer: number = 0;
   private intervalId: any;
 
-  pedido!: IntemPedido;
+  pedido?: IntemPedido;
   subtotal = 0;
   frete = 0;
   total = 0;
@@ -39,19 +39,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   calcularValores(): void {
     if (!this.pedido) return;
 
-    const preco = Number(this.pedido.precoUnitario);
-    const quantidade = Number(this.pedido.quantidade || this.pedido.quantidadeintemCliente || 1);
+    const preco = Number(this.pedido.precoUnitario ?? 0);
+    const quantidade = Number(this.pedido.quantidadeItemCliente ?? 1);
 
     this.subtotal = preco * quantidade;
     this.frete = 0;
-    this.total = Number(this.pedido.total) || (this.subtotal + this.frete);
+    this.total = Number(this.pedido.total ?? this.subtotal + this.frete);
   }
 
   onPaymentMethodChange(value: string) {
     this.paymentMethod = value;
     this.clearTimer();
 
-    if (value === 'pix') {
+    if (value.toLowerCase() === 'pix') {
       this.chamarPixQRCode();
     } else {
       this.pixKey = '';
@@ -60,21 +60,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   chamarPixQRCode() {
-   this.http.get<{ payload: string, qrcodeBase64: string }>('http://localhost:8080/pix/pix/qrcode', {
-  params: { idIntemPedido: this.pedido.idIntemPedido.toString() }
-})
+    if (!this.pedido?.idIntemPedido) return;
 
-      .subscribe({
-        next: (res) => {
-          this.pixKey = res.payload;
-          this.pixQRCodeImage = res.qrcodeBase64;
-          this.startTimer(10 * 60 * 1000);
-        },
-        error: (err) => {
-          console.error('Erro ao gerar QR Code PIX:', err);
-          alert('Erro ao gerar QR Code Pix. Tente novamente.');
-        }
-      });
+    this.http.get<{ payload: string, qrcodeBase64: string }>(
+      'http://localhost:8080/pix/pix/qrcode',
+      { params: { idIntemPedido: this.pedido.idIntemPedido.toString() } }
+    ).subscribe({
+      next: (res) => {
+        this.pixKey = res.payload;
+        this.pixQRCodeImage = res.qrcodeBase64;
+        this.startTimer(10 * 60 * 1000);
+      },
+      error: (err) => {
+        console.error('Erro ao gerar QR Code PIX:', err);
+        alert('Erro ao gerar QR Code Pix. Tente novamente.');
+      }
+    });
   }
 
   startTimer(duration: number) {
@@ -99,6 +100,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   copyPixKey() {
+    if (!this.pixKey) return;
     navigator.clipboard.writeText(this.pixKey).then(() => {
       alert('Chave Pix copiada para a área de transferência!');
     }).catch(() => {
@@ -120,7 +122,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   finalizarPagamentoCartao() {
-    const pedidoId = this.pedido.idIntemPedido;
+    const pedidoId = this.pedido?.idIntemPedido;
     if (!pedidoId) {
       alert('ID do pedido não encontrado!');
       return;

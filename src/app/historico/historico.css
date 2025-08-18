@@ -1,0 +1,25 @@
+.pendente {
+  color: orange;
+  font-weight: bold;
+}
+
+.finalizado {
+  color: green;
+  font-weight: bold;
+}
+
+.pedido-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pedido-table th,
+.pedido-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.pedido-table th {
+  background-color: #f4f4f4;
+  text-align: left;
+}

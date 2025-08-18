@@ -15,6 +15,8 @@ import { Sobre } from './sobre/sobre';
 import { Contato } from './contato/contato';
 
 import { AuthGuard } from './services/auth.guard';  // Importa o guard
+import { HistoricoComponent } from './historico/historico';
+import { A } from '@angular/cdk/keycodes';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -40,7 +42,8 @@ export const routes: Routes = [
       { path: 'login', component: LoginAdmin },     // /admin/login
       { path: 'cadastrointem', component: ProdutoCadastroComponent, canActivate: [AuthGuard] },  // protege cadastro
       { path: 'homeadmin', component: HomeAdmin, canActivate: [AuthGuard] },     
-        { path: 'minhaconta', component: Minhaconta, canActivate: [AuthGuard] }
+        { path: 'minhaconta', component: Minhaconta, canActivate: [AuthGuard] },
+        {path: 'historico', component: HistoricoComponent, canActivate: [AuthGuard]}
                       
     ]
   },

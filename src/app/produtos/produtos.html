@@ -23,18 +23,15 @@
     <div class="rating">
       ★★★★★ <span>(120 sitey reviews)</span>
     </div>
-<p style="font-size: 25px !important;">
-  Quantidade no Estoque: 
-  <span style="color: green !important;   font-size: 25px;">{{ produto.quantidade }}</span>
-</p>
 
-
-
-
-    <p class="short-description">
-      {{ produto.descProduto }}
+    <p style="font-size: 25px !important;">
+      Quantidade no Estoque: 
+      <span style="color: green !important; font-size: 25px;">{{ produto.quantidade }}</span>
     </p>
-<div *ngIf="temTamanhosDisponiveis">
+
+    <p class="short-description">{{ produto.descProduto }}</p>
+
+    <div *ngIf="temTamanhosDisponiveis">
       <p>SIZE</p>
       <button 
         *ngFor="let tamanho of produto.tamanhosDisponiveis"
@@ -44,33 +41,26 @@
         {{ tamanho }}
       </button>
     </div>
-<div class="quantidade-container">
-  <label class="short-description" for="">Quantidade de itens</label>
-  
-  <div class="controle-quantidade">
-    <button (click)="decrementarQuantidade()">−</button>
-    <span>{{ quantidade }}</span>
-    <button (click)="incrementarQuantidade()">+</button>
+
+    <div class="quantidade-container">
+      <label class="short-description">Quantidade de itens</label>
+      <div class="controle-quantidade">
+        <button (click)="decrementarQuantidade()">−</button>
+        <span>{{ quantidadeintemCliente }}</span>
+        <button (click)="incrementarQuantidade()">+</button>
+      </div>
+      <p style="color: red;">{{ erroQuantidade }}</p>
+    </div>
+
+    <button class="add-to-cart" (click)="finalizarCompra()">FINALIZAR COMPRA</button>
+
+    <p>Estoque: {{ produto.estoqueProduto ? 'Disponível' : 'Indisponível' }}</p>
   </div>
-</div>
-
-   <button class="add-to-cart" (click)="finalizarCompra()">FINALIZAR COMPRA</button>
-
-
-    <p>
-      Estoque: {{ produto.estoqueProduto ? 'Disponível' : 'Indisponível' }}
-    </p>
-  </div>
-
-
-
 </main>
 
 <section class="description" *ngIf="produto">
   <h2>DESCRIPTION</h2>
-  <p>
-    {{ produto.descProduto }}
-  </p>
+  <p>{{ produto.descProduto }}</p>
 </section>
 
 <ng-template #loadingOrError>

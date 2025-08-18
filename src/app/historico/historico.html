@@ -1,0 +1,31 @@
+<main class="container">
+  <h1>Histórico de Pedidos</h1>
+
+  <table class="pedido-table">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+        <th>Quantidade</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pedido of pedidosPendentes">
+        <td>{{ pedido.nomeProduto }}</td>
+        <td>{{ pedido.descricaoProduto }}</td>
+        <td>R$ {{ pedido.precoUnitario | number:'1.2-2' }}</td>
+        <td>{{ pedido.quantidadeItemCliente }}</td>
+        <td class="pendente">PENDENTE</td>
+      </tr>
+      <tr *ngFor="let pedido of pedidosFinalizados">
+        <td>{{ pedido.nomeProduto }}</td>
+        <td>{{ pedido.descricaoProduto }}</td>
+        <td>R$ {{ pedido.precoUnitario | number:'1.2-2' }}</td>
+        <td>{{ pedido.quantidadeItemCliente }}</td>
+        <td class="finalizado">FINALIZADO</td>
+      </tr>
+    </tbody>
+  </table>
+</main>

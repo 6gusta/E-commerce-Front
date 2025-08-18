@@ -1,76 +1,66 @@
 <main class="container">
   <h1>Minha Conta</h1>
-<section class="user-profile">
-  <img src="assets/logo.png" class="user-photo" alt="Foto do usuário" />
-<h2 class="user-name">{{ adminNome || 'Carregando...' }}</h2>
+<!-- minhaconta.html -->
+<section class="user-profile" aria-label="Perfil do usuário">
+  <img [src]="adminFoto || 'assets/logo.png'" class="user-photo" alt="Foto do usuário" />
+  <h2 class="user-name">{{ adminNome || 'Carregando...' }}</h2>
 
-<!-- ou, para sempre mostrar o H2 mesmo vazio -->
-<!-- <h2 class="user-name">{{ adminNome || 'Carregando...' }}</h2> -->
-
-
+  <input type="file" (change)="trocarFoto($event)" accept="image/*" />
   <button class="logout-btn" (click)="logout()">Sair</button>
 </section>
 
 
- <section class="sales-summary">
-  <h2>Resumo de Produtos Vendidos</h2>
+  <!-- Carrossel de pedidos pendentes -->
+  <section class="carousel-container" aria-label="Pedidos pendentes">
+    <button class="carousel-button prev" aria-label="Anterior" (click)="scrollCarousel('prev')">&#10094;</button>
 
-  <!-- Agrupado por Mês (exemplo: Julho 2025) -->
-  <div class="sales-group">
-    <h3>Julho 2025</h3>
-    
-    <table class="product-table">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Status</th>
-          <th>Valor Unitário</th>
-          <th>Quantidade</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Produto A</td>
-          <td>Entregue</td>
-          <td>R$ 50,00</td>
-          <td>10</td>
-          <td>R$ 500,00</td>
-        </tr>
-        <tr>
-          <td>Produto B</td>
-          <td>Em processamento</td>
-          <td>R$ 30,00</td>
-          <td>5</td>
-          <td>R$ 150,00</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="carousel-track" #carouselTrack>
+      <div
+        *ngFor="let pedido of pedidos"
+        class="carousel-item pedido-card"
+        role="region"
+        [attr.aria-labelledby]="'pedido-' + pedido.idIntemPedido"
+      >
+        <h3 [id]="'pedido-' + pedido.idIntemPedido">{{ pedido.nomeProduto }}</h3>
+        <p><strong>Descrição:</strong> {{ pedido.descricaoProduto }}</p>
+        <p><strong>Preço:</strong> R$ {{ pedido.precoUnitario | number:'1.2-2' }}</p>
+      <p><strong>Quantidade:</strong> {{ pedido.quantidadeItemCliente }}</p>
+        <p><strong>Pagamento:</strong>
+  <span [id]="'tipoPagamento-' + pedido.idIntemPedido" class="pagamento-status">
+    {{ pedido.pedidoFinalizado ? 'FINALIZADO' : 'PENDENTE' }}
+  </span>
+</p>
 
-  <!-- Outro agrupamento (semana, por exemplo) -->
-  <div class="sales-group">
-    <h3>Semana 01/07 - 07/07</h3>
-    
-    <table class="product-table">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Status</th>
-          <th>Valor Unitário</th>
-          <th>Quantidade</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Produto C</td>
-          <td>Entregue</td>
-          <td>R$ 80,00</td>
-          <td>3</td>
-          <td>R$ 240,00</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+
+        <select [id]="'formaPagamento-' + pedido.idIntemPedido" class="seletor-pagamento" #pagamento>
+          <option value="CARTAO">Cartão</option>
+          <option value="PIX">Pix</option>
+          <option value="DINHEIRO">Dinheiro</option>
+        </select>
+
+<button (click)="finalizarPedido(pedido.idIntemPedido!, pagamento.value!)" class="btn">
+  Finalizar Pedido
+</button>
+
+      </div>
+    </div>
+
+    <button class="carousel-button next" aria-label="Próximo" (click)="scrollCarousel('next')">&#10095;</button>
+  </section>
+
+  <section class="sales-summary" aria-label="Resumo de vendas">
+    <h2>Resumo de Vendas</h2>
+
+    <label for="filtro">Filtrar por:</label>
+    <select id="filtro" [(ngModel)]="filtroSelecionado" (change)="buscarTotal()">
+      <option value="hoje">Hoje</option>
+      <option value="semana">Esta semana</option>
+      <option value="mes">Este mês</option>
+      <option value="ano">Este ano</option>
+    </select>
+
+    <div class="total-vendas">
+      <h3>Total de vendas: R$ {{ totalVendas | number:'1.2-2' }}</h3>
+    </div>
+  </section>
+</main>
