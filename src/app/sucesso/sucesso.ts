@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sucesso',
   templateUrl: './sucesso.html',
-  styleUrls: ['./sucesso.css']
+  styleUrls: ['./sucesso.css'],
+  imports:[RouterModule]
 })
 export class Sucesso implements OnInit {
   codigoRastreamento: string = '';

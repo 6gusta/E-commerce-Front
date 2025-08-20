@@ -25,6 +25,7 @@
         <p><strong>Descrição:</strong> {{ pedido.descricaoProduto }}</p>
         <p><strong>Preço:</strong> R$ {{ pedido.precoUnitario | number:'1.2-2' }}</p>
       <p><strong>Quantidade:</strong> {{ pedido.quantidadeItemCliente }}</p>
+            <p><strong>tipo de Pagamento-:</strong> {{ pedido.tipoPagamento }}</p>
         <p><strong>Pagamento:</strong>
   <span [id]="'tipoPagamento-' + pedido.idIntemPedido" class="pagamento-status">
     {{ pedido.pedidoFinalizado ? 'FINALIZADO' : 'PENDENTE' }}

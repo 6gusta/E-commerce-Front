@@ -4,17 +4,19 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } fr
 import { ProdutoService } from '../services/produtoservice';
 import { Produtomodel } from '../models/produto.model';
 import { HttpClientModule } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro-intem',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule],
   templateUrl: './cadastrointem.html',
   styleUrls: ['./cadastrointem.css']
 })
 export class ProdutoCadastroComponent implements OnInit {
   categorias = ['NOVIDADES', 'PROMOCOES', 'MAISPEDIDOS'];
-  tamanhos = ['S', 'M', 'L', 'XL'];
+tamanhos = ['P', 'M', 'G', 'GG'];
+;
   tipos = [
     'CAMISA', 'CALCA', 'CONJUNTO', 'VESTIDO', 'SAIA', 'BERMUDA', 'BLUSA',
     'JAQUETA', 'CASACO', 'MOLETOM', 'SAPATO', 'TENIS', 'SANDALIA', 'BOTA',
@@ -27,7 +29,7 @@ export class ProdutoCadastroComponent implements OnInit {
   estaEditando = false;
   carregando = false; // para controle de loading (ex: botão desabilitado)
 
-  constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
+  constructor(private fb: FormBuilder, private produtoService: ProdutoService,   private router: Router) {
     this.produtoForm = this.fb.group({
       idproduto: [null],
       nomeProduto: ['', Validators.required],
@@ -40,7 +42,8 @@ export class ProdutoCadastroComponent implements OnInit {
       quantidade: [null, [Validators.required, Validators.min(0)]],
       imagemProduto: [null, Validators.required],
       tamanhosDisponiveis: this.fb.array([]),
-      valorPromocional: [null]
+      valorPromocional: [null],
+      
     });
 
     // Validação dinâmica do campo valorPromocional
@@ -158,7 +161,7 @@ export class ProdutoCadastroComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+onSubmit() {
     if (this.produtoForm.invalid) {
       this.produtoForm.markAllAsTouched();
       alert('⚠️ Preencha todos os campos obrigatórios!');
@@ -166,7 +169,6 @@ export class ProdutoCadastroComponent implements OnInit {
     }
 
     this.carregando = true;
-
     const produto: Produtomodel = this.produtoForm.value;
 
     if (this.estaEditando) {
@@ -175,6 +177,9 @@ export class ProdutoCadastroComponent implements OnInit {
           alert('✅ Produto atualizado com sucesso!');
           this.cancelarEdicao();
           this.carregando = false;
+
+          // Redireciona para outro componente
+          this.router.navigate(['/rota-do-componente']); 
         },
         error: (err) => {
           console.error('Erro ao atualizar produto:', err);
@@ -189,6 +194,9 @@ export class ProdutoCadastroComponent implements OnInit {
           this.produtoForm.reset();
           this.imagemPreview = null;
           this.carregando = false;
+
+          // Redireciona para outro componente
+          this.router.navigate(['/homeadmin']); 
         },
         error: (err) => {
           console.error('Erro ao cadastrar produto:', err);
