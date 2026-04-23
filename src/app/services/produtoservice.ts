@@ -7,8 +7,7 @@ import { Produtomodel } from '../models/produto.model';
   providedIn: 'root'
 })
 export class ProdutoService {
-  // ✅ ROTA DA AZURE ATUALIZADA
-  private apiUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/produto';
+    private apiUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/produto';
 
   constructor(private http: HttpClient) {}
 
@@ -25,16 +24,13 @@ export class ProdutoService {
   }
 
   cadastrarProduto(produto: Produtomodel): Observable<string> {
-    // ✅ Usando a variável apiUrl para não precisar repetir a URL longa
-    return this.http.post(`${this.apiUrl}/register`, produto, {
+    return this.http.post('http://localhost:8080/produto/register', produto, {
       responseType: 'text',
     });
   }
 
   atualizarProduto(id: number, produto: Produtomodel): Observable<Produtomodel> {
-    // ✅ Ajustado para usar a URL da Azure também no Admin
-    const adminUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/admin';
-    return this.http.put<Produtomodel>(`${adminUrl}/up/${id}`, produto);
+    return this.http.put<Produtomodel>(`http://localhost:8080/admin/up/${id}`, produto);
   }
 
   private produtoEditandoSubject = new BehaviorSubject<Produtomodel | null>(null);
