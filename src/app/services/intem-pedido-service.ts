@@ -24,7 +24,9 @@ export class IntemPedidoService {
 
  // private String clienteUrl = "http://localhost:8080/cliente/cadastro";
  private clienteUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/cliente/cadastro';
-  private pedidoUrl = 'http://localhost:8080/intempedido/enviapedidos';
+ // private pedidoUrl = 'http://localhost:8080/intempedido/enviapedidos';
+  private pedidoUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/intempedido/enviapedidos';
+  
   private listarPedidoUrl = 'http://localhost:8080/intempedido/listarpedidos';
   private vincularClienteUrl = 'http://localhost:8080/intempedido'; // usado no PUT
 
