@@ -24,7 +24,7 @@ export class ProdutoService {
   }
 
   cadastrarProduto(produto: Produtomodel): Observable<string> {
-    return this.http.post('http://localhost:8080/produto/register', produto, {
+    return this.http.post('https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/produto/register', produto, {
       responseType: 'text',
     });
   }
