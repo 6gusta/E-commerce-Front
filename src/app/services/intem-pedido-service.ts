@@ -26,9 +26,11 @@ export class IntemPedidoService {
  private clienteUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/cliente/cadastro';
  // private pedidoUrl = 'http://localhost:8080/intempedido/enviapedidos';
   private pedidoUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/intempedido/enviapedidos';
-  
-  private listarPedidoUrl = 'http://localhost:8080/intempedido/listarpedidos';
-  private vincularClienteUrl = 'http://localhost:8080/intempedido'; // usado no PUT
+  private listarPedidoUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/intempedido/listarpedidos';
+  //private listarPedidoUrl = 'http://localhost:8080/intempedido/listarpedidos';
+  //private vincularClienteUrl = 'http://localhost:8080/intempedido';
+  private vincularClienteUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/intempedido';
+  /// usado no PUT
 
   constructor(private http: HttpClient) {}
 
