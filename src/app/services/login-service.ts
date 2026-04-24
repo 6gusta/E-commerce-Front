@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 
-   private apiUrl = 'http://localhost:8080/admin/login';
+  private apiUrl = 'https://e-comeccer-a7gba5fkgfd2azek.canadacentral-01.azurewebsites.net/admin/login';
 
   constructor(private http: HttpClient) {}
 
